@@ -27,10 +27,7 @@ const promoCodesBase64 = {
   "R0lGVDY1NA==": {type:"once", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}},
   "Qk9YMzIx": {type:"unlimited", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},
   "TU9ORVk5ODc=": {type:"unlimited", reward:()=>{addBalance(1000); alert("Отримано 1000 нікусів!");}},
-  "R0lGVDY1NA==": {type:"once", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}}, // залишив, але буде неактивний
-  "R0lGVDY1NQ==": {type:"once", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}}, // на всяк випадок, якщо треба
-  "R0lGVDY1Ng==": {type:"once", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}},
-  "VU5HSUZUMTY0": {type:"once", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}}, // GIFT654 - новий промокод
+  "R0lGVDY1NQ==": {type:"once", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}}, // GIFT654 (замінено UNGIFT1488 на одноразовий)
 };
 
 let currentUser = null;
@@ -39,12 +36,12 @@ let inventory = [];
 let usedPromos = [];
 let blockedItems = new Set();
 
-const qualityNames = {
-  "direct": "Прямо з цеху",
-  "conserv": "Після консервації",
-  "lesson": "Після уроку",
-  "worn": "Зношена"
-};
+const qualities = [
+  {name:"Прямо з цеху", chance:0.125},
+  {name:"Після консервації", chance:0.25},
+  {name:"Після уроку", chance:0.40},
+  {name:"Зношена", chance:0.225}
+];
 
 function saveData() {
   if (!currentUser) return;
@@ -53,6 +50,7 @@ function saveData() {
   localStorage.setItem(currentUser + "_usedPromos", JSON.stringify(usedPromos));
   localStorage.setItem(currentUser + "_blockedItems", JSON.stringify(Array.from(blockedItems)));
 }
+
 function loadData() {
   if (!currentUser) return;
   balance = parseInt(localStorage.getItem(currentUser + "_balance")) || 0;
@@ -111,6 +109,7 @@ function logout() {
 
 function mainMenu() {
   saveData();
+  let promoCodeToShow = "GIFT654"; // замінено з UNGIFT1488
   let html = `<h2>Вітаю, ${currentUser}</h2>`;
   html += `<p>Баланс: ${balance} нікусів</p>`;
   html += `
@@ -126,7 +125,7 @@ function mainMenu() {
       <div style="text-align:center;">
         <img src="img/case_gift.png" width="150" /><br/>
         <button disabled>Подарунковий кейс (Тільки через промо-код)</button><br/>
-        <small>Промокод для подарункового кейса: GIFT654</small>
+        <small>Промокод для подарункового кейса: ${promoCodeToShow}</small>
       </div>
     </div>
     <br />
@@ -168,7 +167,7 @@ function showInventory(){
       const isBlocked = blockedItems.has(item.id);
       if(item.type === "case"){
         html += `
-          <div style="border:1px solid #999; padding:10px; width:160px; text-align:center;">
+          <div style="border:1px solid #999; padding:10px; width:150px; text-align:center; margin-bottom:10px;">
             <b>Кейс: ${getCaseName(item.caseType)}</b><br/>
             <img src="img/case_${item.caseType}.png" width="120" /><br/>
             <button onclick="openCase(${idx})" ${isBlocked ? "disabled" : ""}>Відкрити</button><br/>
@@ -178,13 +177,17 @@ function showInventory(){
         `;
       } else if(item.type === "item"){
         html += `
-          <div style="border:1px solid #666; padding:10px; width:180px; text-align:center; background:#222; color:#fff; border-radius:5px;">
+          <div style="border:1px solid #666; padding:10px; width:180px; text-align:center; background:#222; color:#fff; margin-bottom:10px; border-radius:8px;">
             <b>${item.name}</b><br/>
             <img src="img/${item.img}" width="120" /><br/>
-            <div>Рідкість: <b>${item.rarity}</b></div>
-            <div>Якість: <b>${qualityNames[item.quality] || "Невідома"}</b></div>
-            ${item.premium ? "<div style='color:gold; font-weight:bold;'>Преміум!</div>" : ""}
-            <button onclick="toggleBlock(${idx}); event.stopPropagation();">${isBlocked ? "Розблокувати" : "Заблокувати"}</button><br/>
+            <div style="margin-top:5px; background:${getRarityColor(item.rarity)}; padding:3px 5px; border-radius:4px; font-weight:bold; color:#fff;">
+              Рідкість: ${item.rarity}
+            </div>
+            <div style="margin-top:3px; background:${getQualityColor(item.quality)}; padding:2px 5px; border-radius:4px; font-weight:bold; color:#fff;">
+              Якість: ${item.quality}
+            </div>
+            ${item.premium ? `<div style="margin-top:3px; background:#f5d300; padding:2px 5px; border-radius:4px; font-weight:bold; color:#000;">Преміум!</div>` : ""}
+            <button onclick="toggleBlock(${idx}); event.stopPropagation();" style="margin-top:5px;">${isBlocked ? "Розблокувати" : "Заблокувати"}</button><br/>
             <button onclick="deleteItem(${idx}); event.stopPropagation();" ${isBlocked ? "disabled" : ""} style="margin-top:5px;">Видалити</button>
           </div>
         `;
@@ -228,10 +231,12 @@ function openCase(idx){
   if(!inventory[idx]) return;
   const item = inventory[idx];
   if(item.type !== "case") return;
+
   let drop = null;
   if(item.caseType === "autumn") drop = dropAutumnCase();
   else if(item.caseType === "box") drop = dropBoxCase();
   else if(item.caseType === "gift") drop = dropGiftCase();
+
   if(drop){
     inventory.splice(idx, 1);
     inventory.push(drop);
@@ -248,85 +253,181 @@ function dropByRates(rates){
     sum += rates[key];
     if(r < sum) return key;
   }
-  return "common";
+  // На всяк випадок:
+  return Object.keys(rates)[Object.keys(rates).length - 1];
 }
 
-function randomQuality(){
-  const q = Math.random();
-  if(q < 0.125) return "direct";
-  if(q < 0.375) return "conserv";
-  if(q < 0.775) return "lesson";
-  return "worn";
+function chooseQuality(){
+  // Вибираємо якість за шансами
+  let r = Math.random();
+  let cumulative = 0;
+  for (const q of qualities){
+    cumulative += q.chance;
+    if (r < cumulative) return q.name;
+  }
+  return qualities[qualities.length - 1].name; // на всяк випадок
 }
 
-function randomPremium(quality){
-  if(quality === "worn") return false;
-  return Math.random() < 0.02;
+function isPremiumApplicable(quality){
+  return quality !== "Зношена";
 }
+
+function maybePremium(quality){
+  if(!isPremiumApplicable(quality)) return false;
+  return Math.random() < 0.02; // 2% шанс преміум
+}
+
+function createItem(base){
+  const quality = chooseQuality();
+  const premium = maybePremium(quality);
+  return {
+    id: generateId(),
+    type: "item",
+    name: base.name,
+    img: base.img,
+    rarity: base.rarity,
+    quality,
+    premium
+  };
+}
+
+// Предмети по рідкості
+const itemsPool = {
+  secret: [
+    {name:"Бомбордіро", img:"red1.png", rarity:"Секретна"},
+    {name:"Тралалеро", img:"red2.png", rarity:"Секретна"},
+    {name:"Тунг-Сахур", img:"red3.png", rarity:"Секретна"}
+  ],
+  epic: [
+    {name:"Волтер Вайт", img:"purple1.png", rarity:"Епічна"},
+    {name:"Сігма", img:"purple2.png", rarity:"Епічна"}
+  ],
+  exceptional: [
+    {name:"Сатана", img:"blue2.png", rarity:"Виняткова"},
+    {name:"Хамстер", img:"blue1.png", rarity:"Виняткова"}
+  ],
+  common: [
+    {name:"Пасхалочник", img:"green1.png", rarity:"Звичайна"},
+    {name:"Єнот", img:"green2.png", rarity:"Звичайна"}
+  ]
+};
 
 function dropAutumnCase(){
-  const rates = { secret:0.01, epic:0.14, exceptional:0.35, common:0.50 };
-  const rarity = dropByRates(rates);
-  const quality = randomQuality();
-  const premium = randomPremium(quality);
-  if(rarity === "secret") return {name:"Бомбордіро", img:"red1.png", rarity:"Секретна", quality, premium, type:"item", id:generateId()};
-  if(rarity === "epic") return [{name:"Волтер Вайт", img:"purple1.png", rarity:"Епічна", quality, premium, type:"item", id:generateId()}, {name:"Сігма", img:"purple2.png", rarity:"Епічна", quality, premium, type:"item", id:generateId()}][Math.floor(Math.random()*2)];
-  if(rarity === "exceptional") return [{name:"Сатана", img:"blue2.png", rarity:"Виняткова", quality, premium, type:"item", id:generateId()}, {name:"Хамстер", img:"blue1.png", rarity:"Виняткова", quality, premium, type:"item", id:generateId()}][Math.floor(Math.random()*2)];
-  return [{name:"Пасхалочник", img:"green1.png", rarity:"Звичайна", quality, premium, type:"item", id:generateId()}, {name:"Єнот", img:"green2.png", rarity:"Звичайна", quality, premium, type:"item", id:generateId()}][Math.floor(Math.random()*2)];
+  // Шанси за рідкістю для осіннього кейсу
+  const rates = {secret:0.01, epic:0.14, exceptional:0.35, common:0.50};
+  let rarity = dropByRates(rates);
+
+  // Випадіння предмета відповідно до правил:
+  if(rarity === "secret"){
+    // Тільки "Бомбордіро" в осінньому кейсі
+    return createItem(itemsPool.secret[0]);
+  }
+  if(rarity === "epic"){
+    const choice = itemsPool.epic[Math.floor(Math.random() * itemsPool.epic.length)];
+    return createItem(choice);
+  }
+  if(rarity === "exceptional"){
+    const choice = itemsPool.exceptional[Math.floor(Math.random() * itemsPool.exceptional.length)];
+    return createItem(choice);
+  }
+  // common
+  const commonChoices = [itemsPool.common[0], itemsPool.common[1]];
+  const choice = commonChoices[Math.floor(Math.random() * commonChoices.length)];
+  return createItem(choice);
 }
 
 function dropBoxCase(){
-  const rates = { secret:0, epic:0.14, exceptional:0.35, common:0.51 };
-  const rarity = dropByRates(rates);
-  const quality = randomQuality();
-  const premium = randomPremium(quality);
-  if(rarity === "epic") return [{name:"Волтер Вайт", img:"purple1.png", rarity:"Епічна", quality, premium, type:"item", id:generateId()}, {name:"Сігма", img:"purple2.png", rarity:"Епічна", quality, premium, type:"item", id:generateId()}][Math.floor(Math.random()*2)];
-  if(rarity === "exceptional") return [{name:"Сатана", img:"blue2.png", rarity:"Виняткова", quality, premium, type:"item", id:generateId()}, {name:"Хамстер", img:"blue1.png", rarity:"Виняткова", quality, premium, type:"item", id:generateId()}][Math.floor(Math.random()*2)];
-  return [{name:"Пасхалочник", img:"green1.png", rarity:"Звичайна", quality, premium, type:"item", id:generateId()}, {name:"Єнот", img:"green2.png", rarity:"Звичайна", quality, premium, type:"item", id:generateId()}][Math.floor(Math.random()*2)];
+  // Шанси для боксу (секретні не падають)
+  const rates = {secret:0, epic:0.14, exceptional:0.35, common:0.51};
+  let rarity = dropByRates(rates);
+
+  if(rarity === "epic"){
+    const choice = itemsPool.epic[Math.floor(Math.random() * itemsPool.epic.length)];
+    return createItem(choice);
+  }
+  if(rarity === "exceptional"){
+    const choice = itemsPool.exceptional[Math.floor(Math.random() * itemsPool.exceptional.length)];
+    return createItem(choice);
+  }
+  // common
+  const commonChoices = [itemsPool.common[0], itemsPool.common[1]];
+  const choice = commonChoices[Math.floor(Math.random() * commonChoices.length)];
+  return createItem(choice);
 }
 
 function dropGiftCase(){
-  const rates = { secret:0.02, epic:0.20, exceptional:0.78 };
-  const rarity = dropByRates(rates);
-  const quality = randomQuality();
-  const premium = randomPremium(quality);
-  if(rarity === "secret") return [{name:"Тралалеро", img:"red2.png", rarity:"Секретна", quality, premium, type:"item", id:generateId()}, {name:"Тунг-Сахур", img:"red3.png", rarity:"Секретна", quality, premium, type:"item", id:generateId()}][Math.floor(Math.random()*2)];
-  if(rarity === "epic") return [{name:"Волтер Вайт", img:"purple1.png", rarity:"Епічна", quality, premium, type:"item", id:generateId()}, {name:"Сігма", img:"purple2.png", rarity:"Епічна", quality, premium, type:"item", id:generateId()}][Math.floor(Math.random()*2)];
-  return [{name:"Сатана", img:"blue2.png", rarity:"Виняткова", quality, premium, type:"item", id:generateId()}, {name:"Хамстер", img:"blue1.png", rarity:"Виняткова", quality, premium, type:"item", id:generateId()}][Math.floor(Math.random()*2)];
+  // Подарунковий кейс: секретні Тралалеро та Тунг-Сахур, решта без пасхалочніків
+  const rates = {secret:0.01, epic:0.20, exceptional:0.79};
+  let rarity = dropByRates(rates);
+
+  if(rarity === "secret"){
+    const secretChoices = [itemsPool.secret[1], itemsPool.secret[2]];
+    const choice = secretChoices[Math.floor(Math.random() * secretChoices.length)];
+    return createItem(choice);
+  }
+  if(rarity === "epic"){
+    const choice = itemsPool.epic[Math.floor(Math.random() * itemsPool.epic.length)];
+    return createItem(choice);
+  }
+  // exceptional only, без common
+  const choice = itemsPool.exceptional[Math.floor(Math.random() * itemsPool.exceptional.length)];
+  return createItem(choice);
+}
+
+function getRarityColor(rarity){
+  switch(rarity){
+    case "Секретна": return "#cc0033";
+    case "Епічна": return "#9933ff";
+    case "Виняткова": return "#3399ff";
+    case "Звичайна": return "#33cc33";
+    default: return "#888";
+  }
+}
+
+function getQualityColor(quality){
+  switch(quality){
+    case "Прямо з цеху": return "#e6d31f";
+    case "Після консервації": return "#e67e22";
+    case "Після уроку": return "#2980b9";
+    case "Зношена": return "#555";
+    default: return "#888";
+  }
 }
 
 function promoMenu(){
   let html = `
     <h2>Введіть промокод</h2>
-    <input id="promoInput" placeholder="Промокод" style="width:200px;" />
-    <button onclick="applyPromo()">Активувати</button><br/>
+    <input id="promoInput" placeholder="Промокод" /><br/>
+    <button onclick="applyPromo()">Активувати</button><br/><br/>
     <button onclick="mainMenu()">Назад</button>
   `;
   document.getElementById("app").innerHTML = html;
 }
 
 function applyPromo(){
-  const code = document.getElementById("promoInput").value.trim();
+  let code = document.getElementById("promoInput").value.trim();
   if(!code){
-    alert("Введіть промокод!");
+    alert("Введіть промокод");
     return;
   }
-  const b64code = strToB64(code);
-  if(!promoCodesBase64[b64code]){
-    alert("Невірний промокод!");
+  const codeB64 = strToB64(code);
+  if(!promoCodesBase64[codeB64]){
+    alert("Промокод не знайдено");
     return;
   }
-  const promo = promoCodesBase64[b64code];
-  if(promo.type === "once" && usedPromos.includes(b64code)){
-    alert("Промокод уже використаний");
+  if(promoCodesBase64[codeB64].type === "once" && usedPromos.includes(codeB64)){
+    alert("Цей промокод вже використаний");
     return;
   }
-  promo.reward();
-  if(promo.type === "once") usedPromos.push(b64code);
+  promoCodesBase64[codeB64].reward();
+  if(promoCodesBase64[codeB64].type === "once"){
+    usedPromos.push(codeB64);
+  }
   saveData();
   mainMenu();
 }
 
+// Ініціалізація логіна при завантаженні
 window.onload = () => {
   loginScreen();
 };
