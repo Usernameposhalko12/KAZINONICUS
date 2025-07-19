@@ -1,48 +1,47 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>NICUS CASE ULTRA</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Тимчасово вбудовано стилі для лого та жовтої лінії */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #111;
+      font-family: sans-serif;
+    }
+
+    #logo-container {
+      text-align: center;
+      padding: 20px 0 10px;
+    }
+
+    #logo {
+      width: 280px;
+      max-width: 100%;
+    }
+
+    .yellow-line {
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(to right, gold, #ffcc00, gold);
+      box-shadow: 0 0 10px gold;
+    }
+
+    #app {
+      padding: 10px;
+    }
+  </style>
 </head>
 <body>
-  <div id="app">
-    <header>
-      <img src="img/logo.png" alt="Logo">
-    </header>
-
-    <div class="yellow-line"></div>
-
-    <main>
-      <section class="menu">
-        <button id="openInventory">Інвентар</button>
-        <button id="openTrash">Кошик</button>
-        <input type="text" id="promoInput" placeholder="Промокод">
-        <button id="applyPromo">Активувати</button>
-      </section>
-
-      <section class="cases">
-        <div class="case" data-case="gift">
-          <img src="img/gift.png" alt="Gift Case">
-          <button class="open-case-btn">Відкрити</button>
-        </div>
-        <div class="case" data-case="box">
-          <img src="img/box.png" alt="Box Case">
-          <button class="open-case-btn">Відкрити</button>
-        </div>
-      </section>
-
-      <section id="inventory" class="hidden">
-        <h2>Інвентар</h2>
-        <div id="inventoryItems" class="item-grid"></div>
-      </section>
-
-      <section id="trash" class="hidden">
-        <h2>Кошик</h2>
-        <div id="trashItems" class="item-grid"></div>
-      </section>
-    </main>
+  <div id="logo-container">
+    <img src="img/logo.png" alt="NICUS CASE ULTRA" id="logo" />
   </div>
+  <div class="yellow-line"></div>
+
+  <div id="app"></div>
 
   <script src="script.js"></script>
 </body>
