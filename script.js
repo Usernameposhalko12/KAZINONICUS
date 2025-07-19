@@ -27,7 +27,8 @@ const promoCodesBase64 = {
   "R0lGVDY1NA==": {type:"once", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}},
   "Qk9YMzIx": {type:"unlimited", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},
   "TU9ORVk5ODc=": {type:"unlimited", reward:()=>{addBalance(1000); alert("Отримано 1000 нікусів!");}},
-  "VU5HSUZUMTQ4OA==": {type:"unlimited", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}}
+  "VU5HSUZUMTQ4OA==": {type:"unlimited", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}},
+  "R0lGVDY1NDY=": {type:"unlimited", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}}, // GIFT654 промо
 };
 
 let currentUser = null;
@@ -71,8 +72,8 @@ function b64ToStr(b64) {
 function loginScreen() {
   document.getElementById("app").innerHTML = `
     <h2>Вхід у акаунт</h2>
-    <input id="login" placeholder="Логін" /><br />
-    <input id="password" placeholder="Пароль" type="password" /><br />
+    <input id="login" placeholder="Логін" autocomplete="off" /><br />
+    <input id="password" placeholder="Пароль" type="password" autocomplete="off" /><br />
     <button onclick="login()">Увійти</button>
   `;
 }
@@ -171,7 +172,8 @@ function showInventory(){
           <div style="border:1px solid #666; padding:10px; width:140px; text-align:center; background:#222; color:#fff;">
             <b>${item.name}</b><br/>
             <img src="img/${item.img}" width="120" /><br/>
-            <small>${item.rarity}</small><br/>
+            <div style="margin:5px 0; font-weight:bold;">${item.quality}</div>
+            <div style="font-style:italic; color:#aaa;">${item.rarity}</div>
             <button onclick="toggleBlock(${idx}); event.stopPropagation();">${isBlocked ? "Розблокувати" : "Заблокувати"}</button><br/>
             <button onclick="deleteItem(${idx}); event.stopPropagation();" ${isBlocked ? "disabled" : ""} style="margin-top:5px;">Видалити</button>
           </div>
@@ -226,7 +228,7 @@ function openCase(idx){
     inventory.splice(idx, 1);
     inventory.push(drop);
     saveData();
-    alert(`Вам випало: ${drop.name} (${drop.rarity})`);
+    alert(`Вам випало: ${drop.name} (${drop.quality})`);
     showInventory();
   }
 }
@@ -244,32 +246,32 @@ function dropByRates(rates){
 function dropAutumnCase(){
   const rates = { secret:0.01, epic:0.14, exceptional:0.35, common:0.50 };
   const rarity = dropByRates(rates);
-  if(rarity === "secret") return {name:"Бомбордіро", img:"red1.png", rarity:"Секретна", type:"item", id:generateId()};
-  if(rarity === "epic") return [{name:"Волтер Вайт", img:"purple1.png", rarity:"Епічна", type:"item", id:generateId()}, {name:"Сігма", img:"purple2.png", rarity:"Епічна", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
-  if(rarity === "exceptional") return [{name:"Сатана", img:"blue2.png", rarity:"Виняткова", type:"item", id:generateId()}, {name:"Хамстер", img:"blue1.png", rarity:"Виняткова", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
-  return [{name:"Пасхалочник", img:"green1.png", rarity:"Звичайна", type:"item", id:generateId()}, {name:"Єнот", img:"green2.png", rarity:"Звичайна", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
+  if(rarity === "secret") return {name:"Бомбордіро", img:"red1.png", rarity:"Секретна", quality:"Секретна", type:"item", id:generateId()};
+  if(rarity === "epic") return [{name:"Волтер Вайт", img:"purple1.png", rarity:"Епічна", quality:"Епічна", type:"item", id:generateId()}, {name:"Сігма", img:"purple2.png", rarity:"Епічна", quality:"Епічна", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
+  if(rarity === "exceptional") return [{name:"Сатана", img:"blue2.png", rarity:"Виняткова", quality:"Виняткова", type:"item", id:generateId()}, {name:"Хамстер", img:"blue1.png", rarity:"Виняткова", quality:"Виняткова", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
+  return [{name:"Пасхалочник", img:"green1.png", rarity:"Звичайна", quality:"Звичайна", type:"item", id:generateId()}, {name:"Єнот", img:"green2.png", rarity:"Звичайна", quality:"Звичайна", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
 }
 
 function dropBoxCase(){
   const rates = { secret:0, epic:0.14, exceptional:0.35, common:0.51 };
   const rarity = dropByRates(rates);
-  if(rarity === "epic") return [{name:"Волтер Вайт", img:"purple1.png", rarity:"Епічна", type:"item", id:generateId()}, {name:"Сігма", img:"purple2.png", rarity:"Епічна", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
-  if(rarity === "exceptional") return [{name:"Сатана", img:"blue2.png", rarity:"Виняткова", type:"item", id:generateId()}, {name:"Хамстер", img:"blue1.png", rarity:"Виняткова", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
-  return [{name:"Пасхалочник", img:"green1.png", rarity:"Звичайна", type:"item", id:generateId()}, {name:"Єнот", img:"green2.png", rarity:"Звичайна", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
+  if(rarity === "epic") return [{name:"Волтер Вайт", img:"purple1.png", rarity:"Епічна", quality:"Епічна", type:"item", id:generateId()}, {name:"Сігма", img:"purple2.png", rarity:"Епічна", quality:"Епічна", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
+  if(rarity === "exceptional") return [{name:"Сатана", img:"blue2.png", rarity:"Виняткова", quality:"Виняткова", type:"item", id:generateId()}, {name:"Хамстер", img:"blue1.png", rarity:"Виняткова", quality:"Виняткова", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
+  return [{name:"Пасхалочник", img:"green1.png", rarity:"Звичайна", quality:"Звичайна", type:"item", id:generateId()}, {name:"Єнот", img:"green2.png", rarity:"Звичайна", quality:"Звичайна", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
 }
 
 function dropGiftCase(){
   const rates = { secret:0.01, epic:0.20, exceptional:0.79 };
   const rarity = dropByRates(rates);
-  if(rarity === "secret") return [{name:"Тралалеро", img:"red2.png", rarity:"Секретна", type:"item", id:generateId()}, {name:"Тунг-Сахур", img:"red3.png", rarity:"Секретна", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
-  if(rarity === "epic") return [{name:"Волтер Вайт", img:"purple1.png", rarity:"Епічна", type:"item", id:generateId()}, {name:"Сігма", img:"purple2.png", rarity:"Епічна", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
-  return [{name:"Сатана", img:"blue2.png", rarity:"Виняткова", type:"item", id:generateId()}, {name:"Хамстер", img:"blue1.png", rarity:"Виняткова", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
+  if(rarity === "secret") return [{name:"Тралалеро", img:"red2.png", rarity:"Секретна", quality:"Секретна", type:"item", id:generateId()}, {name:"Тунг-Сахур", img:"red3.png", rarity:"Секретна", quality:"Секретна", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
+  if(rarity === "epic") return [{name:"Волтер Вайт", img:"purple1.png", rarity:"Епічна", quality:"Епічна", type:"item", id:generateId()}, {name:"Сігма", img:"purple2.png", rarity:"Епічна", quality:"Епічна", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
+  return [{name:"Сатана", img:"blue2.png", rarity:"Виняткова", quality:"Виняткова", type:"item", id:generateId()}, {name:"Хамстер", img:"blue1.png", rarity:"Виняткова", quality:"Виняткова", type:"item", id:generateId()}][Math.floor(Math.random()*2)];
 }
 
 function promoMenu(){
   let html = `
     <h2>Введіть промокод</h2>
-    <input id="promoInput" placeholder="Промокод" style="width:200px;" />
+    <input id="promoInput" placeholder="Промокод" style="width:200px;" autocomplete="off" />
     <button onclick="applyPromo()">Активувати</button><br/>
     <button onclick="mainMenu()">Назад</button>
   `;
