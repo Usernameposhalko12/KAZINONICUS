@@ -27,7 +27,7 @@ const promoCodesBase64 = {
   "R0lGVDY1NA==": {type:"once", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}},
   "Qk9YMzIx": {type:"unlimited", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},
   "TU9ORVk5ODc=": {type:"unlimited", reward:()=>{addBalance(1000); alert("Отримано 1000 нікусів!");}},
-  "R0lGVDY1NQ==": {type:"once", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}}, // GIFT654 (замінено UNGIFT1488 на одноразовий)
+  "R0lGVDY1NQ==": {type:"unlimited", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}}, // GIFT654 (замінено UNGIFT1488 на одноразовий)
 };
 
 let currentUser = null;
