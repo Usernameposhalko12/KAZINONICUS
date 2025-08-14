@@ -27,7 +27,10 @@ const promoCodesBase64 = {
   "R0lGVDY1NA==": {type:"once", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}},
   "Qk9YMzIx": {type:"unlimited", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},
   "TU9ORVk5ODc=": {type:"unlimited", reward:()=>{addBalance(1000); alert("Отримано 1000 нікусів!");}},
-  "R0lGVDY1NQ==": {type:"unlimited", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}}, // GIFT654 (замінено UNGIFT1488 на одноразовий)
+  "R0lGVDY1NQ==": {type:"unlimited", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}},
+  "TklMSU1JVEFVVDI1": {type:"unlimited", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},
+  "WVNFTExBVVRVU1QyNQ==": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},
+  "RE9ESUsyNTBPS0FL": {type:"unlimited", reward:()=>{addBalance(250); alert("Отримано 250 нікусів!");}}
 };
 
 let currentUser = null;
@@ -109,7 +112,7 @@ function logout() {
 
 function mainMenu() {
   saveData();
-  let promoCodeToShow = "GIFT654"; // замінено з UNGIFT1488
+  let promoCodeToShow = "GIFT654"; 
   let html = `<h2>Вітаю, ${currentUser}</h2>`;
   html += `<p>Баланс: ${balance} нікусів</p>`;
   html += `
@@ -314,7 +317,7 @@ const itemsPool = {
 
 function dropAutumnCase(){
   // Шанси за рідкістю для осіннього кейсу
-  const rates = {secret:0.01, epic:0.14, exceptional:0.35, common:0.50};
+  const rates = {secret:0.01, epic:0.14, exceptional:0.30, common:0.55};
   let rarity = dropByRates(rates);
 
   // Випадіння предмета відповідно до правил:
@@ -338,7 +341,7 @@ function dropAutumnCase(){
 
 function dropBoxCase(){
   // Шанси для боксу (секретні не падають)
-  const rates = {secret:0, epic:0.14, exceptional:0.35, common:0.51};
+  const rates = {secret:0, epic:0.10, exceptional:30., common:0.60};
   let rarity = dropByRates(rates);
 
   if(rarity === "epic"){
