@@ -9,7 +9,8 @@ const accounts = {
   "NAZARK": "Geometrydash1488",
   "Egoroblox": "undertale52",
   "SIGMA228": "KOT1488",
-  "BABULKA777": "KOT52"
+  "BABULKA777": "KOT52",
+  "OBSHAK123": "OBSHAK123"
 };
 
 const promoCodesBase64 = {
@@ -256,12 +257,10 @@ function dropByRates(rates){
     sum += rates[key];
     if(r < sum) return key;
   }
-  // На всяк випадок:
   return Object.keys(rates)[Object.keys(rates).length - 1];
 }
 
 function chooseQuality(){
-  // Вибираємо якість за шансами
   let r = Math.random();
   let cumulative = 0;
   for (const q of qualities){
@@ -316,13 +315,10 @@ const itemsPool = {
 };
 
 function dropAutumnCase(){
-  // Шанси за рідкістю для осіннього кейсу
+
   const rates = {secret:0.01, epic:0.14, exceptional:0.30, common:0.55};
   let rarity = dropByRates(rates);
-
-  // Випадіння предмета відповідно до правил:
   if(rarity === "secret"){
-    // Тільки "Бомбордіро" в осінньому кейсі
     return createItem(itemsPool.secret[0]);
   }
   if(rarity === "epic"){
@@ -340,8 +336,7 @@ function dropAutumnCase(){
 }
 
 function dropBoxCase(){
-  // Шанси для боксу (секретні не падають)
-  const rates = {secret:0, epic:0.10, exceptional:30., common:0.60};
+  const rates = {secret:0, epic:0.10, exceptional:0.30, common:0.60};
   let rarity = dropByRates(rates);
 
   if(rarity === "epic"){
@@ -359,7 +354,6 @@ function dropBoxCase(){
 }
 
 function dropGiftCase(){
-  // Подарунковий кейс: секретні Тралалеро та Тунг-Сахур, решта без пасхалочніків
   const rates = {secret:0.01, epic:0.20, exceptional:0.79};
   let rarity = dropByRates(rates);
 
