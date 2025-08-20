@@ -543,6 +543,9 @@ function startDino() {
         <br/><button onclick='arcadeMenu()'>⬅ Назад</button>
     `;
 
+    const jumpBtn = document.getElementById("jumpBtn");
+    jumpBtn.addEventListener("pointerdown", jumpDino);
+
     const canvas=document.getElementById("dinoCanvas");
     const ctx=canvas.getContext("2d");
     const dinoImg=new Image(); dinoImg.src="img/dino.png";
@@ -558,7 +561,6 @@ function startDino() {
         } 
     }
 
-    document.getElementById("jumpBtn").addEventListener("click", jumpDino);
     window.addEventListener("keydown", e => { if(e.code==="Space") jumpDino(); });
 
     function spawnCactus(){
