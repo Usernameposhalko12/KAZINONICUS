@@ -430,7 +430,7 @@ function arcadeMenu() {
         <h2>🎮 Міні-ігри</h2>
         <p>Баланс: ${balance} нікусів</p>
         <button onclick="startSaperPaid()" ${balance < 20 ? "disabled" : ""}>Сапер (20 нікусів)</button><br/><br/>
-        <button onclick="startDinoPaid()" ${balance < 30 ? "disabled" : ""}>Динозаврик (30 нікусів)</button><br/><br/>
+        <button onclick="startDinoPaid()" ${balance < 40 ? "disabled" : ""}>Динозаврик (40 нікусів)</button><br/><br/>
         <button onclick="mainMenu()">⬅ Назад</button>
     `;
 }
@@ -517,20 +517,20 @@ function startSaper() {
 }
 
 function startDinoPaid(){
-    if(balance<30){
+    if(balance<40){
         alert("Недостатньо нікусів для гри в Динозаврик!");
         return;
     }
-    addBalance(-30);
+    addBalance(-40);
     startDino();
 }
 
 function startDinoPaid(){
-    if(balance<30){
+    if(balance<40){
         alert("Недостатньо нікусів для гри в Динозаврик!");
         return;
     }
-    addBalance(-30);
+    addBalance(-40);
     startDino();
 }
 
