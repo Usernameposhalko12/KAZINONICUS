@@ -525,42 +525,50 @@ function startDinoPaid(){
     startDino();
 }
 
+function startDinoPaid(){
+    if(balance<30){
+        alert("Недостатньо нікусів для гри в Динозаврик!");
+        return;
+    }
+    addBalance(-30);
+    startDino();
+}
+
 function startDino() {
     document.getElementById("app").innerHTML=`
         <h2>Динозаврик</h2>
         <p>Натискайте ПРОБІЛ або кнопку "Стрибок" для стрибка. Мета: уникати кактусів.</p>
         <canvas id="dinoCanvas" width="600" height="150" style="border:1px solid #555; display:block; margin:auto;"></canvas>
-        <br/><button onclick='jumpDino()' style='font-size:22px; padding:15px 40px;'>Стрибок</button>
+        <br/><button id="jumpBtn" style='font-size:22px; padding:15px 40px;'>Стрибок</button>
         <br/><button onclick='arcadeMenu()'>⬅ Назад</button>
     `;
+
     const canvas=document.getElementById("dinoCanvas");
     const ctx=canvas.getContext("2d");
     const dinoImg=new Image(); dinoImg.src="img/dino.png";
     const cactusImg=new Image(); cactusImg.src="img/cactus.png";
 
-    let dinoY=120,dinoV=0,gravity=0.6,jumping=false;
-    let obstacles=[], frame=0, score=0, gameOver=false;
+    let dinoY=120, dinoV=0, gravity=0.6, jumping=false;
+    let obstacles=[], frame=0, score=0, gameOver=false, cactusCount=0;
 
-    window.jumpDino = function(){
+    function jumpDino(){
         if(!jumping){ 
             dinoV=-12;
             jumping=true; 
         } 
     }
 
-    window.addEventListener("keydown", e=>{ 
-        if(e.code==="Space") jumpDino(); 
-    });
+    document.getElementById("jumpBtn").addEventListener("click", jumpDino);
+    window.addEventListener("keydown", e => { if(e.code==="Space") jumpDino(); });
 
     function spawnCactus(){
-        let groupSize = 1;
-        if(score >= 30){
-            groupSize = Math.random() < 0.6 ? 2 : 3; 
-        } else if(score >= 15){
-            groupSize = Math.random() < 0.7 ? 1 : 2;
-        }
-        for(let i=0; i<groupSize; i++){
-            obstacles.push({x:600 + i*30, w:20, h:30});
+        cactusCount++;
+        let count=1;
+        if(cactusCount<=10) count=1;
+        else if(cactusCount<=30) count=Math.random()<0.5?2:1;
+        else count=Math.random()<0.3?3:2;
+        for(let i=0;i<count;i++){
+            obstacles.push({x:600+i*25, w:20, h:30});
         }
     }
 
@@ -570,24 +578,17 @@ function startDino() {
         if(dinoY>120){ dinoY=120; dinoV=0; jumping=false; }
         ctx.drawImage(dinoImg,50,dinoY,30,30);
 
-        if(frame % 50 === 0){ spawnCactus(); }
+        if(frame % 66 === 0) spawnCactus();
 
-        let speed = 4;
-        if(score >= 30) speed = 7;
-        else if(score >= 15) speed = 5;
-
-        obstacles.forEach(o=>{
-            o.x -= speed;
-            ctx.drawImage(cactusImg,o.x,120,o.w,o.h);
-        });
-        obstacles=obstacles.filter(o=>o.x+o.w>0);
+        obstacles.forEach(o=>{ o.x-=4; ctx.drawImage(cactusImg,o.x,120,o.w,o.h); });
+        obstacles = obstacles.filter(o => o.x+o.w>0);
 
         for(let o of obstacles){
             if(50<o.x+o.w && 80>o.x && dinoY<150 && dinoY+30>120){ gameOver=true; }
         }
 
         if(!gameOver){
-            if(frame%55===0) score++;
+            if(frame % 90 === 0) score++;
             ctx.fillStyle="black"; ctx.fillText("Очки: "+score,500,20);
             frame++;
             requestAnimationFrame(gameLoop);
@@ -603,7 +604,6 @@ function startDino() {
 
     gameLoop();
 }
-
 // Ініціалізація логіна при завантаженні
 
 window.onload = () => {
