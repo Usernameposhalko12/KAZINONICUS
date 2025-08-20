@@ -580,7 +580,7 @@ function startDino() {
         if(dinoY>120){ dinoY=120; dinoV=0; jumping=false; }
         ctx.drawImage(dinoImg,50,dinoY,30,30);
 
-        if(frame % 55 === 0) spawnCactus();
+        if(frame % 45 === 0) spawnCactus();
 
         obstacles.forEach(o=>{ o.x-=4; ctx.drawImage(cactusImg,o.x,120,o.w,o.h); });
         obstacles = obstacles.filter(o => o.x+o.w>0);
