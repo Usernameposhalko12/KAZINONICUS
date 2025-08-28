@@ -47,13 +47,13 @@ function saveData() {
 }
 
 function addBalance(amount) {
-    if (typeof balance === "undefined") window.balance = 0;
-    balance = Number(balance) || 0;
-    balance += Number(amount);
-    localStorage.setItem("balance", balance);
+    if (!user.balance) user.balance = 0;
+    user.balance += Number(amount);
+    saveUser(); // зберегти зміни
     const el = document.getElementById("balanceDisplay");
-    if (el) el.textContent = balance;
-    return balance;
+    if (el) el.textContent = user.balance;
+    checkTasks(); // перевіряємо завдання
+    return user.balance;
 }
 
 function generateId() {
