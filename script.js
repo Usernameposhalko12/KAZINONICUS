@@ -53,7 +53,6 @@ function addBalance(amount) {
     localStorage.setItem("balance", balance);
     const el = document.getElementById("balanceDisplay");
     if (el) el.textContent = balance;
-    checkTasks(); // перевіряємо завдання одразу
     return balance;
 }
 
