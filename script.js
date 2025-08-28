@@ -73,13 +73,13 @@ function saveData() {
 }
 
 function addBalance(amount) {
-    if(!user) return;
-    user.balance = user.balance || 0; // на всяк випадок
-    user.balance += amount;
-    saveUser(); // зберігаємо зміни у localStorage
-    const balanceEl = document.getElementById("balanceCounter");
-    if(balanceEl) balanceEl.textContent = user.balance; // оновлюємо відображення балансу на екрані
-    return user.balance;
+    if (typeof balance === "undefined") window.balance = 0;
+    balance = Number(balance) || 0;
+    balance += Number(amount);
+    localStorage.setItem("balance", balance);
+    const el = document.getElementById("balanceDisplay");
+    if (el) el.textContent = balance;
+    return balance;
 }
 
 function generateId() {
