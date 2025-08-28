@@ -986,18 +986,26 @@ function saveUser() {
     localStorage.setItem("userData", JSON.stringify(user));
 }
 
+// додаємо BP
+function addBP(amount) {
+    user.bpPoints += amount;
+    saveUser();
+}
+
 loadUser();
+
+// === ЗАВДАННЯ ===
 const tasks = [
-  {id:1, description:"Отримати 'Доге' або 'Нагетс'", reward:()=>addBP(2500), check:()=>inventory.some(i=>["Доге","Нагетс"].includes(i.name)), completed:false},
-{id:2,description:"Зібрати всі звичайні предмети ('Пасхалочник','Єнот','Дракон','Булінг-кіт')",reward:()=>addBP(2000),check:()=>["Пасхалочник","Єнот","Дракон","Булінг-кіт"].every(n=>inventory.some(i=>i.name===n)),completed:false},
-  {id:3, description:"Отримати всі виняткові предмети ('Сатана','Хамстер','Ракета-кіт','Хорор-кіт')", reward:()=>addBP(3000), check:()=>["Сатана","Хамстер","Ракета-кіт","Хорор-кіт"].every(n=>inventory.some(i=>i.name===n)), completed:false},
-  {id:4, description:"Отримати звичайний предмет у якості 'Зношена' ('Єнот','Посхалочник','Дракон','Булінг-кіт')", reward:()=>addBP(1000), check:()=>inventory.some(i=>["Єнот","Посхалочник","Дракон","Булінг-кіт"].includes(i.name)&&i.quality==="Зношена"), completed:false},
-  { id: 5, description: "Накопичити на балансі 250 нікусів", reward: () => addBP(1000), check: () => user.balance >= 250, completed: false },
-  { id: 6, description: "Накопичити на балансі 500 нікусів", reward: () => addBP(4000), check: () => user.balance >= 500, completed: false },
-  { id: 7, description: "Зібрати 5 предметів будь-якої рідкості", reward: () => addBP(800), check: () => user.items.length >= 5, completed: false },
-  { id: 8, description: "Отримати будь-який секретний предмет ('Супермен', 'Бомбордіро', 'Тунг-Сахур', 'Тралалеро')", reward: () => addBP(4000), check: () => user.items.some(i => ["Супермен", "Бомбордіро", "Тунг-Сахур", "Тралалеро"].includes(i.name)), completed: false },
-  { id: 9, description: "Отримати предмет якості 'Прямо з цеху'", reward: () => addBP(1000), check: () => user.items.some(i => i.quality === "Прямо з цеху"), completed: false },
-  { id: 10, description: "Отримати будь-який предмет преміум", reward: () => addBP(1500), check: () => user.items.some(i => i.premium === true), completed: false }
+  {id:1, description:"Отримати 'Доге' або 'Нагетс'", reward:()=>addBP(2500), check:()=>user.items.some(i=>["Доге","Нагетс"].includes(i.name)), completed:false},
+  {id:2, description:"Зібрати всі звичайні предмети ('Пасхалочник','Єнот','Дракон','Булінг-кіт')", reward:()=>addBP(2000), check:()=>["Пасхалочник","Єнот","Дракон","Булінг-кіт"].every(n=>user.items.some(i=>i.name===n)), completed:false},
+  {id:3, description:"Отримати всі виняткові предмети ('Сатана','Хамстер','Ракета-кіт','Хорор-кіт')", reward:()=>addBP(3000), check:()=>["Сатана","Хамстер","Ракета-кіт","Хорор-кіт"].every(n=>user.items.some(i=>i.name===n)), completed:false},
+  {id:4, description:"Отримати звичайний предмет у якості 'Зношена' ('Єнот','Пасхалочник','Дракон','Булінг-кіт')", reward:()=>addBP(1000), check:()=>user.items.some(i=>["Єнот","Пасхалочник","Дракон","Булінг-кіт"].includes(i.name)&&i.quality==="Зношена"), completed:false},
+  {id:5, description:"Накопичити на балансі 250 нікусів", reward:()=>addBP(1000), check:()=>user.balance >= 250, completed:false},
+  {id:6, description:"Накопичити на балансі 500 нікусів", reward:()=>addBP(4000), check:()=>user.balance >= 500, completed:false},
+  {id:7, description:"Зібрати 5 предметів будь-якої рідкості", reward:()=>addBP(800), check:()=>user.items.length >= 5, completed:false},
+  {id:8, description:"Отримати будь-який секретний предмет ('Супермен','Бомбордіро','Тунг-Сахур','Тралалеро')", reward:()=>addBP(4000), check:()=>user.items.some(i=>["Супермен","Бомбордіро","Тунг-Сахур","Тралалеро"].includes(i.name)), completed:false},
+  {id:9, description:"Отримати предмет якості 'Прямо з цеху'", reward:()=>addBP(1000), check:()=>user.items.some(i=>i.quality==="Прямо з цеху"), completed:false},
+  {id:10, description:"Отримати будь-який предмет преміум", reward:()=>addBP(1500), check:()=>user.items.some(i=>i.premium===true), completed:false}
 ];
 
 function saveTasks() {
@@ -1010,43 +1018,41 @@ function loadTasks() {
         const saved = JSON.parse(data);
         saved.forEach(s => {
             const task = tasks.find(t => t.id === s.id);
-            if (task) task.completed = !!s.completed; // гарантуємо булевий тип
+            if (task) task.completed = s.completed;
         });
     }
 }
 
 function completeTask(taskId) {
     const task = tasks.find(t => t.id === taskId);
-    if (!task) return;
-    if (task.completed) return alert("Це завдання вже виконано!");
-
-    // Перевірка умови виконання
-    if (task.check && task.check()) {
-        task.reward?.(); // безпечне викликання reward
+    if(!task) return;
+    if(task.completed) return alert("Це завдання вже виконано!");
+    if(task.check()) {
+        task.reward();
         task.completed = true;
         saveUser();
         saveTasks();
         alert(`Завдання виконано! Ви отримали BP!`);
-        renderTasks(); // оновлюємо DOM після виконання
+        renderTasks();
     } else {
         alert("Завдання ще не виконано!");
     }
 }
 
-loadUser();
-loadTasks(); // спочатку завантажуємо стан завдань
-let openedCases = user.openedCases || {autumn:0, fallalt:0, autumnus:0, box:0, gift:0};
-
 function checkTasks() {
-  tasks.forEach(task => {
-    if (!task.completed && task.check()) {
-      task.completed = true;
-      saveUser();
-      saveTasks();
-      // alert прибрано
-    }
-  });
+    tasks.forEach(task => {
+        if (!task.completed && task.check()) {
+            task.reward();
+            task.completed = true;
+            saveUser();
+            saveTasks();
+            alert(`✅ Завдання виконано: ${task.description}!`);
+        }
+    });
 }
+
+loadTasks();
+let openedCases = user.openedCases || {autumn:0, fallalt:0, autumnus:0, box:0, gift:0};
 
 function performAction(actionType, payload) {
     switch(actionType) {
