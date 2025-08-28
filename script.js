@@ -317,7 +317,7 @@ function isPremiumApplicable(quality){
 
 function maybePremium(quality){
   if(!isPremiumApplicable(quality)) return false;
-  return Math.random() < 0.02; 
+  return Math.random() < 0.05; 
 }
 
 function createItem(base){
