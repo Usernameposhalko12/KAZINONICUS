@@ -899,8 +899,7 @@ const container = document.getElementById("app");
         <h2>🎟️ FallPass 25</h2>
         <div style="display:flex; justify-content:space-around; margin-bottom:10px;">
             <button onclick="showPass('free')">Free Pass</button>
-     <button onclick="${premiumActive ? "showPass('premium')" : "alert('У вас немає преміуму!')"}">
-            Premium Pass
+            <button onclick="showPass('premium')">Premium Pass</button>
             <button onclick="openEventsMenu()">Назад</button>
         </div>
         <div id="fallPassContainer" style="overflow-x:auto; white-space:nowrap; padding:10px; border:1px solid #ccc; border-radius:10px;"></div>
