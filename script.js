@@ -917,17 +917,18 @@ function showPass(passType) {
         `;
 
 lvlDiv.onclick = () => {
-    if(!locked && !claimed){
+    const nowClaimed = isClaimed(passType, level.level); // перевірка актуального стану
+    if(!locked && !nowClaimed){
         saveClaimed(passType, level.level);
         lvlDiv.style.backgroundColor = "#d4f4dd";
         if(level.type === "coins") {
-            addBalance(level.reward); // додаємо нікуси у баланс
+            addBalance(level.reward);
         } else {
-            addCase(level.reward); // предмет
+            addCase(level.reward);
         }
     } else if (locked){
         alert("Потрібно більше BP для цього рівня!");
-    } else if (claimed){
+    } else if (nowClaimed){
         alert("Ви вже забрали цю нагороду!");
     }
 };
