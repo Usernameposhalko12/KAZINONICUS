@@ -31,7 +31,12 @@ const promoCodesBase64 = {
   "R0lGVDY1NQ==": {type:"unlimited", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}},
   "TklMSU1JVEFVVDI1": {type:"unlimited", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},
   "WVNFTExBVVRVU1QyNQ==": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},
-  "RE9ESUsyNTBPS0FL": {type:"unlimited", reward:()=>{addBalance(250); alert("Отримано 250 нікусів!");}}
+  "RE9ESUsyNTBPS0FL": {type:"unlimited", reward:()=>{addBalance(250); alert("Отримано 250 нікусів!");}},
+  "TkFUVVJBTA==":{type:"unlimited",reward:()=>{addCase("fallalt");alert("Отримано кейс FallAlternative25!");}},
+  "QVVUSFVNMTIzMTQ4OA==":{type:"unlimited",reward:()=>{addCase("autumnus");alert("Отримано кейс Autumnus25!");}},
+  "T05DRTEwMDBCUA==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
+  "VU4xMDAwQlA=": {type:"unlimited", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
+  "UFJJTUU0NTZQUklNRT==": {type:"once", reward:()=>{setPremium(true); alert("Активовано Premium Pass!");}}
 };
 
 let currentUser = null;
@@ -53,14 +58,18 @@ function saveData() {
   localStorage.setItem(currentUser + "_inventory", JSON.stringify(inventory));
   localStorage.setItem(currentUser + "_usedPromos", JSON.stringify(usedPromos));
   localStorage.setItem(currentUser + "_blockedItems", JSON.stringify(Array.from(blockedItems)));
+  localStorage.setItem(currentUser + "_bpPoints", currentBP);
 }
 
-function loadData() {
+  let currentBP = 0;
+
+  function loadData() {
   if (!currentUser) return;
   balance = parseInt(localStorage.getItem(currentUser + "_balance")) || 0;
   inventory = JSON.parse(localStorage.getItem(currentUser + "_inventory")) || [];
   usedPromos = JSON.parse(localStorage.getItem(currentUser + "_usedPromos")) || [];
   blockedItems = new Set(JSON.parse(localStorage.getItem(currentUser + "_blockedItems")) || []);
+  currentBP = parseInt(localStorage.getItem(currentUser + "_bpPoints")) || 0;
 }
 
 function addBalance(amount) {
@@ -134,8 +143,10 @@ function mainMenu() {
     </div>
     <br />
     <button onclick="promoMenu()">🎁 Ввести промокод</button><br/>
+    <button onclick="openEventsMenu()">🎟️ Івенти</button><br/>
     <button onclick="showInventory()">🎒 Інвентар (${inventory.length})</button><br/>
     <button onclick="arcadeMenu()">🎮 Міні-ігри</button><br/>  
+    <button onclick="accountMenu()">Акаунт ⚙️</button>
     <button onclick="logout()">🚪 Вийти</button>
   `;
   document.getElementById("app").innerHTML = html;
@@ -153,13 +164,22 @@ function buyCase(type){
   mainMenu();
 }
 
-function addCase(type){
+function addCase(caseType){
+  if(!currentUser) return;
   if(inventory.length >= 100){
     alert("Інвентар заповнений!");
     return;
   }
-  inventory.push({id: generateId(), type: "case", caseType: type});
+
+  const item = {
+    id: generateId(),
+    type: "case",
+    caseType: caseType
+  };
+
+  inventory.push(item);
   saveData();
+  alert(`Отримано: ${getCaseName(caseType)}`);
 }
 
 function showInventory(){
@@ -229,6 +249,8 @@ function getCaseName(type){
   if(type === "autumn") return "Осінь25";
   if(type === "box") return "Бокс";
   if(type === "gift") return "Подарунковий кейс";
+  if(type === "fallalt") return "FallAlternative25";
+  if(type === "autumnus") return "Autumnus25";
   return "Невідомий кейс";
 }
 
@@ -241,6 +263,8 @@ function openCase(idx){
   if(item.caseType === "autumn") drop = dropAutumnCase();
   else if(item.caseType === "box") drop = dropBoxCase();
   else if(item.caseType === "gift") drop = dropGiftCase();
+  else if(item.caseType === "fallalt") drop = dropFallAlternative25Case();
+  else if(item.caseType === "autumnus") drop = dropAutumnus25Case();
 
   if(drop){
     inventory.splice(idx, 1);
@@ -249,6 +273,43 @@ function openCase(idx){
     alert(`Вам випало: ${drop.name} (${drop.rarity}${drop.premium ? ", Преміум" : ""})`);
     showInventory();
   }
+}
+
+// FallAlternative25
+function dropFallAlternative25Case(){
+  const pool = [
+    {name:"Супермен", img:"superman.png", rarity:"Секретна", chance:0.02},
+    {name:"Нагетс", img:"nugget.png", rarity:"Епічна", chance:0.05},
+    {name:"Доге", img:"doge.png", rarity:"Епічна", chance:0.05},
+    {name:"Ракета-кіт", img:"rocketcat.png", rarity:"Виняткова", chance:0.19},
+    {name:"Хорор-кіт", img:"horrorcat.png", rarity:"Виняткова", chance:0.19},
+    {name:"Дракон", img:"dragon.png", rarity:"Звичайна", chance:0.25},
+    {name:"Булінг-кіт", img:"bullycat.png", rarity:"Звичайна", chance:0.25}
+  ];
+
+  let r = Math.random(), sum = 0;
+  for(const p of pool){
+    sum += p.chance;
+    if(r < sum) return createItem(p);
+  }
+  return createItem(pool[pool.length-1]);
+}
+
+function dropAutumnus25Case(){
+  const pool = [
+    {name:"Супермен", img:"superman.png", rarity:"Секретна", chance:0.05},
+    {name:"Бомбордіро", img:"red1.png", rarity:"Секретна", chance:0.05},
+    {name:"Тралалеро", img:"red2.png", rarity:"Секретна", chance:0.05},
+    {name:"Тунг-Сахур", img:"red3.png", rarity:"Секретна", chance:0.05},
+    {name:"Булінг-кіт", img:"bullycat.png", rarity:"Звичайна", chance:0.80}
+  ];
+
+  let r = Math.random(), sum = 0;
+  for(const p of pool){
+    sum += p.chance;
+    if(r < sum) return createItem(p);
+  }
+  return createItem(pool[pool.length-1]);
 }
 
 function dropByRates(rates){
@@ -525,15 +586,6 @@ function startDinoPaid(){
     startDino();
 }
 
-function startDinoPaid(){
-    if(balance<35){
-        alert("Недостатньо нікусів для гри в Динозаврик!");
-        return;
-    }
-    addBalance(-35);
-    startDino();
-}
-
 function startDino() {
     document.getElementById("app").innerHTML=`
         <h2>Динозаврик</h2>
@@ -606,7 +658,463 @@ function startDino() {
 
     gameLoop();
 }
-// Ініціалізація логіна при завантаженні
+
+function openEventsMenu() {
+    if(!currentUser) return alert("Спочатку увійдіть в акаунт");
+
+    const container = document.getElementById("app");
+    container.innerHTML = `
+        <h2>🎟️ Івенти</h2>
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:40px;">
+            <div style="text-align:center;">
+                <img src="img/FallPass25Button.png" alt="FallPass 25" style="width:360px; cursor:pointer;" onclick="openFallPass()" />
+            </div>
+            <div style="text-align:center; margin-top:50px;">
+                <button style="padding:10px 20px; font-size:16px;" onclick="mainMenu()">Назад</button>
+            </div>
+        </div>
+        <h3>Майбутні івенти</h3>
+        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
+            <button style="padding:10px 20px; font-size:16px;" disabled>Майбутній івент 1</button>
+            <button style="padding:10px 20px; font-size:16px;" disabled>Майбутній івент 2</button>
+            <button style="padding:10px 20px; font-size:16px;" onclick="openTasksMenu()">Завдання 🎯</button>
+        </div>
+    `;
+}
+
+function addBP(amount){
+    if(!currentUser) return;
+    currentBP += amount;
+    localStorage.setItem(currentUser + "_bpPoints", currentBP);
+    const el = document.getElementById("bpCounter");
+    if(el) el.textContent = currentBP;
+    return currentBP;
+}
+
+const fallPassImages = {
+  free: {
+    1: "case_fallalt.png",
+    2: "money.png",
+    3: "case_autumn.png",
+    4: "case_fallalt.png",
+    5: "money.png",
+    6: "case_autumn.png",
+    7: "case_gift.png",
+    8: "case_fallalt.png",
+    9: "case_autumn.png",
+    10: "case_fallalt.png",
+    11: "money.png",
+    12: "case_autumn.png",
+    13: "case_fallalt.png",
+    14: "case_fallalt.png",
+    15: "case_fallalt.png",
+    16: "case_autumn.png",
+    17: "case_fallalt.png",
+    18: "case_fallalt.png",
+    19: "case_gift.png",
+    20: "case_fallalt.png",
+    21: "case_autumn.png",
+    22: "case_fallalt.png",
+    23: "case_fallalt.png",
+    24: "case_gift.png",
+    25: "case_autumn.png",
+    26: "case_fallalt.png",
+    27: "case_autumn.png",
+    28: "case_fallalt.png",
+    29: "case_fallalt.png",
+    30: "case_fallalt.png",
+    31: "money.png",
+    32: "money.png",
+    33: "case_autumn.png",
+    34: "case_gift.png",
+    35: "case_autumnus.png"
+  },
+  premium: {
+    1: "case_autumnus.png",
+    2: "money.png",
+    3: "case_autumn.png",
+    4: "case_fallalt.png",
+    5: "money.png",
+    6: "case_autumn.png",
+    7: "case_gift.png",
+    8: "case_fallalt.png",
+    9: "case_autumn.png",
+    10: "money.png",
+    11: "case_fallalt.png",
+    12: "case_autumn.png",
+    13: "money.png",
+    14: "case_gift.png",
+    15: "case_autumnus.png",
+    16: "case_autumn.png",
+    17: "case_fallalt.png",
+    18: "money.png",
+    19: "case_gift.png",
+    20: "case_fallalt.png",
+    21: "case_autumn.png",
+    22: "case_fallalt.png",
+    23: "case_fallalt.png",
+    24: "case_gift.png",
+    25: "case_autumn.png",
+    26: "money.png",
+    27: "case_autumn.png",
+    28: "case_fallalt.png",
+    29: "case_fallalt.png",
+    30: "case_fallalt.png",
+    31: "money.png",
+    32: "case_autumn.png",
+    33: "case_gift.png",
+    34: "case_autumnus.png",
+    35: "case_autumnus.png"
+  }
+};
+
+// ----------------- рівні Free Pass -----------------
+const freePassLevels = [
+  { level: 1, reward: "fallalt", type: "item" },
+  { level: 2, reward: 10, type: "coins" },
+  { level: 3, reward: "box", type: "item" },
+  { level: 4, reward: "fallalt", type: "item" },
+  { level: 5, reward: 20, type: "coins" },
+  { level: 6, reward: "autumn", type: "item" },
+  { level: 7, reward: "gift", type: "item" },
+  { level: 8, reward: "fallalt", type: "item" },
+  { level: 9, reward: "box", type: "item" },
+  { level: 10, reward: "fallalt", type: "item" },
+  { level: 11, reward: 50, type: "coins" },
+  { level: 12, reward: "box", type: "item" },
+  { level: 13, reward: "fallalt", type: "item" },
+  { level: 14, reward: "fallalt", type: "item" },
+  { level: 15, reward: "fallalt", type: "item" },
+  { level: 16, reward: "box", type: "item" },
+  { level: 17, reward: "fallalt", type: "item" },
+  { level: 18, reward: "fallalt", type: "item" },
+  { level: 19, reward: "gift", type: "item" },
+  { level: 20, reward: "fallalt", type: "item" },
+  { level: 21, reward: "box", type: "item" },
+  { level: 22, reward: "fallalt", type: "item" },
+  { level: 23, reward: "fallalt", type: "item" },
+  { level: 24, reward: "gift", type: "item" },
+  { level: 25, reward: "box", type: "item" },
+  { level: 26, reward: "fallalt", type: "item" },
+  { level: 27, reward: "autumn", type: "item" },
+  { level: 28, reward: "fallalt", type: "item" },
+  { level: 29, reward: "fallalt", type: "item" },
+  { level: 30, reward: "fallalt", type: "item" },
+  { level: 31, reward: 10, type: "coins" },
+  { level: 32, reward: 20, type: "coins" },
+  { level: 33, reward: "box", type: "item" },
+  { level: 34, reward: "gift", type: "item" },
+  { level: 35, reward: "autumnus", type: "item" }
+];
+
+// ----------------- рівні Premium Pass -----------------
+const premiumPassLevels = [
+  { level: 1, reward: "autumnus", type: "item" },
+  { level: 2, reward: 20, type: "coins" },
+  { level: 3, reward: "box", type: "item" },
+  { level: 4, reward: "fallalt", type: "item" },
+  { level: 5, reward: 50, type: "coins" },
+  { level: 6, reward: "autumn", type: "item" },
+  { level: 7, reward: "gift", type: "item" },
+  { level: 8, reward: "fallalt", type: "item" },
+  { level: 9, reward: "box", type: "item" },
+  { level: 10, reward: 100, type: "coins" },
+  { level: 11, reward: "fallalt", type: "item" },
+  { level: 12, reward: "box", type: "item" },
+  { level: 13, reward: 150, type: "coins" },
+  { level: 14, reward: "gift", type: "item" },
+  { level: 15, reward: "autumnus", type: "item" },
+  { level: 16, reward: "box", type: "item" },
+  { level: 17, reward: "fallalt", type: "item" },
+  { level: 18, reward: 200, type: "coins" },
+  { level: 19, reward: "gift", type: "item" },
+  { level: 20, reward: "fallalt", type: "item" },
+  { level: 21, reward: "box", type: "item" },
+  { level: 22, reward: "fallalt", type: "item" },
+  { level: 23, reward: "fallalt", type: "item" },
+  { level: 24, reward: "gift", type: "item" },
+  { level: 25, reward: "box", type: "item" },
+  { level: 26, reward: 250, type: "coins" },
+  { level: 27, reward: "autumn", type: "item" },
+  { level: 28, reward: "fallalt", type: "item" },
+  { level: 29, reward: "fallalt", type: "item" },
+  { level: 30, reward: "fallalt", type: "item" },
+  { level: 31, reward: 300, type: "coins" },
+  { level: 32, reward: "box", type: "item" },
+  { level: 33, reward: "gift", type: "item" },
+  { level: 34, reward: "autumnus", type: "item" },
+  { level: 35, reward: "autumnus", type: "item" }
+];
+
+const totalLevels = 35;
+const bpPerLevel = 1000;
+
+// ----------------- зберігання прогресу -----------------
+function saveClaimed(passType, level){
+    if(!currentUser) return;
+    const key = currentUser + "_bp_claimed_" + passType;
+    const claimed = JSON.parse(localStorage.getItem(key) || "{}");
+    claimed[level] = true;
+    localStorage.setItem(key, JSON.stringify(claimed));
+}
+
+function isClaimed(passType, level){
+    if(!currentUser) return false;
+    const key = currentUser + "_bp_claimed_" + passType;
+    const claimed = JSON.parse(localStorage.getItem(key) || "{}");
+    return !!claimed[level];
+}
+
+// ----------------- відображення Pass -----------------
+function openFallPass() {
+    const endDate = new Date("2025-10-01"); // Кінець батл-пасу
+    const now = new Date(); // Поточна дата
+
+    if(now >= endDate) {
+        alert("Батл-пас завершено! Ви більше не можете отримувати нагороди.");
+        return;
+    }
+
+const container = document.getElementById("app");
+    container.innerHTML = `
+        <h2>🎟️ FallPass 25</h2>
+        <div style="display:flex; justify-content:space-around; margin-bottom:10px;">
+            <button onclick="showPass('free')">Free Pass</button>
+            <button onclick="showPass('premium')">Premium Pass</button>
+            <button onclick="openEventsMenu()">Назад</button>
+        </div>
+        <div id="fallPassContainer" style="overflow-x:auto; white-space:nowrap; padding:10px; border:1px solid #ccc; border-radius:10px;"></div>
+        <div style="margin-top:10px;">Ваші BP: <span id="bpCounter">${currentBP}</span></div>
+    `;
+    showPass('free');
+}
+
+function showPass(passType) {
+    const container = document.getElementById("fallPassContainer");
+    container.innerHTML = ""; 
+    const levels = passType === 'free' ? freePassLevels : premiumPassLevels;
+
+    levels.forEach(level => {
+        const lvlDiv = document.createElement("div");
+        lvlDiv.style.display = "inline-block";
+        lvlDiv.style.width = "120px";
+        lvlDiv.style.margin = "5px";
+        lvlDiv.style.textAlign = "center";
+        lvlDiv.style.cursor = "pointer";
+        lvlDiv.style.border = "2px solid #ccc";
+        lvlDiv.style.borderRadius = "10px";
+        lvlDiv.style.padding = "5px";
+
+        const locked = currentBP < level.level * bpPerLevel;
+        const imgFile = fallPassImages[passType][level.level];
+        const claimed = isClaimed(passType, level.level);
+
+        lvlDiv.style.backgroundColor = claimed ? "#d4f4dd" : "#ffe066";
+
+
+        lvlDiv.innerHTML = `
+            <img src="img/${imgFile}" alt="Level ${level.level}" style="width:100px; height:100px;" /> 
+            <div style="color:black;">Level ${level.level}</div>
+            <div style="color:black;">${locked ? "🔒" : (level.type === "coins" ? level.reward + " нікусів" : getCaseName(level.reward))}</div>
+        `;
+
+lvlDiv.onclick = () => {
+    if(!locked && !claimed){
+        saveClaimed(passType, level.level);
+        lvlDiv.style.backgroundColor = "#d4f4dd";
+        if(level.type === "coins") {
+            addBalance(level.reward); // додаємо нікуси у баланс
+        } else {
+            addCase(level.reward); // предмет
+        }
+    } else if (locked){
+        alert("Потрібно більше BP для цього рівня!");
+    } else if (claimed){
+        alert("Ви вже забрали цю нагороду!");
+    }
+};
+
+container.appendChild(lvlDiv);
+});
+}
+
+function openTasksMenu() {
+    if(!currentUser) return alert("Спочатку увійдіть в акаунт");
+
+    checkTasks(); // ← додали перевірку завдань перед рендером
+
+    const container = document.getElementById("app");
+
+    let tasksHTML = tasks.map(t => {
+        return `
+            <div style="padding:10px; margin-bottom:5px; border-radius:5px; background-color:${t.completed ? '#d4edda' : '#D49F37'};">
+                ${t.completed ? '✔' : '❌'} ${t.description}
+            </div>
+        `;
+    }).join('');
+
+    container.innerHTML = `
+        <h2>🎯 Завдання</h2>
+        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
+            ${tasksHTML}
+        </div>
+        <button style="padding:10px 20px; font-size:16px;" onclick="openEventsMenu()">⬅ Назад до Івентів</button>
+    `;
+}
+
+let user = {
+    balance: 0,
+    bpPoints: 0,
+    openedCases: {},
+    items: [],
+    secretBills: 0
+};
+
+function loadUser() {
+    const data = localStorage.getItem("userData");
+    if (data) {
+        user = JSON.parse(data);
+        user.balance = user.balance || 0;
+        user.bpPoints = user.bpPoints || 0;
+        user.openedCases = user.openedCases || {};
+        user.items = user.items || [];
+        user.secretBills = user.secretBills || 0;
+    }
+}
+
+function saveUser() {
+    localStorage.setItem("userData", JSON.stringify(user));
+}
+
+loadUser();
+const tasks = [
+  {id:1, description:"Отримати 'Доге' або 'Нагетс'", reward:()=>addBP(2500), check:()=>inventory.some(i=>["Доге","Нагетс"].includes(i.name)), completed:false},
+{id:2,description:"Зібрати всі звичайні предмети ('Пасхалочник','Єнот','Дракон','Булінг-кіт')",reward:()=>addBP(2000),check:()=>["Пасхалочник","Єнот","Дракон","Булінг-кіт"].every(n=>inventory.some(i=>i.name===n)),completed:false},
+  {id:3, description:"Отримати всі виняткові предмети ('Сатана','Хамстер','Ракета-кіт','Хорор-кіт')", reward:()=>addBP(3000), check:()=>["Сатана","Хамстер","Ракета-кіт","Хорор-кіт"].every(n=>inventory.some(i=>i.name===n)), completed:false},
+  {id:4, description:"Отримати звичайний предмет у якості 'Зношена' ('Єнот','Посхалочник','Дракон','Булінг-кіт')", reward:()=>addBP(1000), check:()=>inventory.some(i=>["Єнот","Посхалочник","Дракон","Булінг-кіт"].includes(i.name)&&i.quality==="Зношена"), completed:false},
+  { id: 5, description: "Накопичити на балансі 250 нікусів", reward: () => addBP(1000), check: () => user.balance >= 250, completed: false },
+  { id: 6, description: "Накопичити на балансі 500 нікусів", reward: () => addBP(4000), check: () => user.balance >= 500, completed: false },
+  { id: 7, description: "Зібрати 5 предметів будь-якої рідкості", reward: () => addBP(800), check: () => user.items.length >= 5, completed: false },
+  { id: 8, description: "Отримати будь-який секретний предмет ('Супермен', 'Бомбордіро', 'Тунг-Сахур', 'Тралалеро')", reward: () => addBP(4000), check: () => user.items.some(i => ["Супермен", "Бомбордіро", "Тунг-Сахур", "Тралалеро"].includes(i.name)), completed: false },
+  { id: 9, description: "Отримати предмет якості 'Прямо з цеху'", reward: () => addBP(1000), check: () => user.items.some(i => i.quality === "Прямо з цеху"), completed: false },
+  { id: 10, description: "Отримати будь-який предмет преміум", reward: () => addBP(1500), check: () => user.items.some(i => i.premium === true), completed: false }
+];
+
+function saveTasks() {
+    localStorage.setItem("tasksData", JSON.stringify(tasks.map(t => ({id: t.id, completed: t.completed}))));
+}
+
+function loadTasks() {
+    const data = localStorage.getItem("tasksData");
+    if (data) {
+        const saved = JSON.parse(data);
+        saved.forEach(s => {
+            const task = tasks.find(t => t.id === s.id);
+            if (task) task.completed = s.completed;
+        });
+    }
+}
+
+function completeTask(taskId) {
+  const task = tasks.find(t => t.id === taskId);
+  if(!task) return;
+  if(task.completed) return alert("Це завдання вже виконано!");
+  if(task.check()) {
+    task.reward();
+    task.completed = true;
+    saveUser();
+    saveTasks();
+    alert(`Завдання виконано! Ви отримали BP!`);
+    renderTasks();
+  } else {
+    alert("Завдання ще не виконано!");
+  }
+}
+
+loadUser();
+loadTasks(); // спочатку завантажуємо стан завдань
+let openedCases = user.openedCases || {autumn:0, fallalt:0, autumnus:0, box:0, gift:0};
+
+function checkTasks() {
+  tasks.forEach(task => {
+    if (!task.completed && task.check()) {
+      task.reward();
+      task.completed = true;
+      saveUser();
+      saveTasks();
+      alert(`✅ Завдання виконано: ${task.description}!`);
+    }
+  });
+}
+
+function performAction(actionType, payload) {
+    switch(actionType) {
+        case "openCase":
+            user.openedCases[payload] = (user.openedCases[payload] || 0) + 1;
+            break;
+        case "addBalance":
+            user.balance += payload;
+            break;
+        case "receiveItem":
+            if(payload && typeof payload === "object") user.items.push(payload);
+            break;
+        case "collectSecretBill":
+            user.secretBills += 1;
+            break;
+        default:
+            console.warn("Невідома дія:", actionType);
+            return;
+    }
+    saveUser();
+    checkTasks();
+}
+
+function accountMenu() {
+    document.getElementById("app").innerHTML = `
+        <h2>Акаунт ⚙️</h2>
+        <input type="password" id="deletePass" placeholder="Введіть пароль" oninput="checkDeletePass()"/><br/><br/>
+        <button id="deleteBtn" onclick="deleteProgress()" disabled>Видалити прогрес</button><br/><br/>
+        <button onclick="mainMenu()">⬅ Назад</button>
+    `;
+}
+
+function checkDeletePass() {
+    const pass = document.getElementById("deletePass").value;
+    document.getElementById("deleteBtn").disabled = (pass !== "5242");
+}
+
+function deleteProgress() {
+    const pass = document.getElementById("deletePass").value;
+    if(pass !== "5242") {
+        alert("Неправильний пароль!");
+        return;
+    }
+    if(confirm("Ви впевнені, що хочете видалити весь прогрес? Цю дію не можна скасувати.")) {
+        localStorage.clear();
+        alert("Прогрес видалено! Сторінка буде перезавантажена.");
+        location.reload();
+    }
+}
+
+function setPremium(active){
+    if(!currentUser) return;
+    localStorage.setItem(currentUser + "_premiumActive", active ? "1" : "0");
+}
+
+function loadPremium(){
+    if(!currentUser) return false;
+    return localStorage.getItem(currentUser + "_premiumActive") === "1";
+}
+
+if(loadPremium()){
+    console.log(currentUser + " має преміум!");
+}
+
+function applyPromoCode(){
+    setPremium(true);
+    alert("Преміум активовано для " + currentUser);
+}
+
 
 window.onload = () => {
   loginScreen();
