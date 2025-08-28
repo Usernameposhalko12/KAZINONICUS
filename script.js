@@ -47,13 +47,14 @@ function saveData() {
 }
 
 function addBalance(amount) {
-    if (!user.balance) user.balance = 0;
-    user.balance += Number(amount);
-    saveUser(); // зберегти зміни
+    if (typeof balance === "undefined") window.balance = 0;
+    balance = Number(balance) || 0;
+    balance += Number(amount);
+    localStorage.setItem("balance", balance);
     const el = document.getElementById("balanceDisplay");
-    if (el) el.textContent = user.balance;
-    checkTasks(); // перевіряємо завдання
-    return user.balance;
+    if (el) el.textContent = balance;
+    checkTasks(); // перевіряємо завдання одразу
+    return balance;
 }
 
 function generateId() {
@@ -990,8 +991,8 @@ const tasks = [
 {id:2,description:"Зібрати всі звичайні предмети ('Пасхалочник','Єнот','Дракон','Булінг-кіт')",reward:()=>addBP(2000),check:()=>["Пасхалочник","Єнот","Дракон","Булінг-кіт"].every(n=> inventory.some(i=>i.name===n)),completed:false},
   {id:3, description:"Отримати всі виняткові предмети ('Сатана','Хамстер','Ракета-кіт','Хорор-кіт')", reward:()=>addBP(3000), check:()=>["Сатана","Хамстер","Ракета-кіт","Хорор-кіт"].every(n=> inventory.some(i=>i.name===n)), completed:false},
   {id:4, description:"Отримати звичайний предмет у якості 'Зношена' ('Єнот','Посхалочник','Дракон','Булінг-кіт')", reward:()=>addBP(1000), check:()=> inventory.some(i=>["Єнот","Посхалочник","Дракон","Булінг-кіт"].includes(i.name)&&i.quality==="Зношена"), completed:false},
-  { id: 5, description: "Накопичити на балансі 250 нікусів", reward: () => addBP(1000), check: () => user.balance >= 250, completed: false },
-  { id: 6, description: "Накопичити на балансі 500 нікусів", reward: () => addBP(4000), check: () => user.balance >= 500, completed: false },
+{ id: 5, description: "Накопичити на балансі 250 нікусів", reward: () => addBP(1000), check: () => balance >= 250, completed: false },
+{ id: 6, description: "Накопичити на балансі 500 нікусів", reward: () => addBP(4000), check: () => balance >= 500, completed: false },
   { id: 7, description: "Зібрати 5 предметів будь-якої рідкості", reward: () => addBP(800), check: () => inventory.length >= 5, completed: false },
   { id: 8, description: "Отримати будь-який секретний предмет ('Супермен', 'Бомбордіро', 'Тунг-Сахур', 'Тралалеро')", reward: () => addBP(4000), check: () => inventory.some(i => ["Супермен", "Бомбордіро", "Тунг-Сахур", "Тралалеро"].includes(i.name)), completed: false },
   { id: 9, description: "Отримати предмет якості 'Прямо з цеху'", reward: () => addBP(1000), check: () => inventory.some(i => i.quality === "Прямо з цеху"), completed: false },
