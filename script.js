@@ -1059,7 +1059,8 @@ function performAction(actionType, payload) {
             console.warn("Невідома дія:", actionType);
             return;
     }
-    saveUser();
+   inventory = user.items;
+  saveUser();
     checkTasks();
 }
 
