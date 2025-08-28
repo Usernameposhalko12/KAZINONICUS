@@ -73,8 +73,13 @@ function saveData() {
 }
 
 function addBalance(amount) {
-  balance += amount;
-  saveData();
+    if(!user) return;
+    user.balance = user.balance || 0; // на всяк випадок
+    user.balance += amount;
+    saveUser(); // зберігаємо зміни у localStorage
+    const balanceEl = document.getElementById("balanceCounter");
+    if(balanceEl) balanceEl.textContent = user.balance; // оновлюємо відображення балансу на екрані
+    return user.balance;
 }
 
 function generateId() {
@@ -1000,13 +1005,6 @@ function loadUser() {
 
 function saveUser() {
     localStorage.setItem("userData", JSON.stringify(user));
-}
-
-function addBalance(amount) {
-    if(!user) return;
-    user.balance += amount;
-    saveUser();
-    return user.balance;
 }
 
 loadUser();
