@@ -13,32 +13,6 @@ const accounts = {
   "OBSHAK123": "OBSHAK123"
 };
 
-const promoCodesBase64 = {
-  "TklDVVMxMjM=": {type:"once", reward:()=>{addBalance(250); alert("Отримано 250 нікусів!");}},
-  "TklLVVM0NTY=": {type:"unlimited", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
-  "S0FWSUsxNTk=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
-  "TklDVVMwMDE=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
-  "TklDVVMwMDI=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
-  "TklDVVMwMDM=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
-  "TklDVVMwMDQ=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
-  "TklDVVMwMDU=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
-  "TklDVVMwMDY=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
-  "TklDVVMwMDc=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
-  "Q0FTRTc4OQ==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},
-  "R0lGVDY1NA==": {type:"once", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}},
-  "Qk9YMzIx": {type:"unlimited", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},
-  "TU9ORVk5ODc=": {type:"unlimited", reward:()=>{addBalance(1000); alert("Отримано 1000 нікусів!");}},
-  "R0lGVDY1NQ==": {type:"unlimited", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}},
-  "TklMSU1JVEFVVDI1": {type:"unlimited", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},
-  "WVNFTExBVVRVU1QyNQ==": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},
-  "RE9ESUsyNTBPS0FL": {type:"unlimited", reward:()=>{addBalance(250); alert("Отримано 250 нікусів!");}},
-  "TkFUVVJBTA==":{type:"unlimited",reward:()=>{addCase("fallalt");alert("Отримано кейс FallAlternative25!");}},
-  "QVVUSFVNMTIzMTQ4OA==":{type:"unlimited",reward:()=>{addCase("autumnus");alert("Отримано кейс Autumnus25!");}},
-  "T05DRTEwMDBCUA==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
-  "VU4xMDAwQlA=": {type:"unlimited", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
-  "UFJJTUU0NTZQUklNRT==": {type:"once", reward:()=>{setPremium(true); alert("Активовано Premium Pass!");}}
-};
-
 let currentUser = null;
 let balance = 0;
 let inventory = [];
@@ -865,11 +839,6 @@ if(loadPremium()){
     console.log(currentUser + " має преміум!");
 }
 
-function applyPromoCode(){
-    setPremium(true);
-    alert("Преміум активовано для " + currentUser);
-}
-
 const totalLevels = 35;
 const bpPerLevel = 1000;
 
@@ -904,14 +873,21 @@ const container = document.getElementById("app");
         <h2>🎟️ FallPass 25</h2>
         <div style="display:flex; justify-content:space-around; margin-bottom:10px;">
             <button onclick="showPass('free')">Free Pass</button>
-            <button onclick="showPass('premium')">Premium Pass</button>
-            <button onclick="openEventsMenu()">Назад</button>
+    <button id="premiumBtn" onclick="showPass('premium')" disabled title="Необхідно активувати Premium">Premium Pass</button>
+           <button onclick="openEventsMenu()">Назад</button>
         </div>
         <div id="fallPassContainer" style="overflow-x:auto; white-space:nowrap; padding:10px; border:1px solid #ccc; border-radius:10px;"></div>
         <div style="margin-top:10px;">Ваші BP: <span id="bpCounter">${currentBP}</span></div>
     `;
-    showPass('free');
+
+       const btn = document.getElementById("premiumBtn");
+if(localStorage.getItem("premiumUnlocked") === "1" && btn){
+    btn.disabled = false;
+    btn.title = "";
 }
+
+    showPass('free');
+} 
 
 function showPass(passType) {
     const container = document.getElementById("fallPassContainer");
@@ -1113,6 +1089,45 @@ function deleteProgress() {
         location.reload();
     }
 }
+
+const promoCodesBase64 = {
+  "TklDVVMxMjM=": {type:"once", reward:()=>{addBalance(250); alert("Отримано 250 нікусів!");}},
+  "TklLVVM0NTY=": {type:"unlimited", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+  "S0FWSUsxNTk=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+  "TklDVVMwMDE=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+  "TklDVVMwMDI=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+  "TklDVVMwMDM=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+  "TklDVVMwMDQ=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+  "TklDVVMwMDU=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+  "TklDVVMwMDY=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+  "TklDVVMwMDc=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+  "Q0FTRTc4OQ==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},
+  "R0lGVDY1NA==": {type:"once", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}},
+  "Qk9YMzIx": {type:"unlimited", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},
+  "TU9ORVk5ODc=": {type:"unlimited", reward:()=>{addBalance(1000); alert("Отримано 1000 нікусів!");}},
+  "R0lGVDY1NQ==": {type:"unlimited", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}},
+  "TklMSU1JVEFVVDI1": {type:"unlimited", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},
+  "WVNFTExBVVRVU1QyNQ==": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},
+  "RE9ESUsyNTBPS0FL": {type:"unlimited", reward:()=>{addBalance(250); alert("Отримано 250 нікусів!");}},
+  "TkFUVVJBTA==":{type:"unlimited",reward:()=>{addCase("fallalt");alert("Отримано кейс FallAlternative25!");}},
+  "QVVUSFVNMTIzMTQ4OA==":{type:"unlimited",reward:()=>{addCase("autumnus");alert("Отримано кейс Autumnus25!");}},
+  "T05DRTEwMDBCUA==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
+  "VU4xMDAwQlA=": {type:"unlimited", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
+
+"VU5MT0NLUFJFTUlVTQ==": {
+  type: "unlimited",
+  reward: () => {
+      const btn = document.getElementById("premiumBtn");
+      if(btn){
+          btn.disabled = false;
+          btn.title = "";
+      }
+      localStorage.setItem("premiumUnlocked", "1");
+alert("Кнопка Premium Pass розблокована!");
+  }
+}
+
+};
 
 window.onload = () => {
   loginScreen();
