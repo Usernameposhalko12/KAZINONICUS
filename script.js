@@ -1010,25 +1010,27 @@ function loadTasks() {
         const saved = JSON.parse(data);
         saved.forEach(s => {
             const task = tasks.find(t => t.id === s.id);
-            if (task) task.completed = s.completed;
+            if (task) task.completed = !!s.completed; // гарантуємо булевий тип
         });
     }
 }
 
 function completeTask(taskId) {
-  const task = tasks.find(t => t.id === taskId);
-  if(!task) return;
-  if(task.completed) return alert("Це завдання вже виконано!");
-  if(task.check()) {
-    task.reward();
-    task.completed = true;
-    saveUser();
-    saveTasks();
-    alert(`Завдання виконано! Ви отримали BP!`);
-    renderTasks();
-  } else {
-    alert("Завдання ще не виконано!");
-  }
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+    if (task.completed) return alert("Це завдання вже виконано!");
+
+    // Перевірка умови виконання
+    if (task.check && task.check()) {
+        task.reward?.(); // безпечне викликання reward
+        task.completed = true;
+        saveUser();
+        saveTasks();
+        alert(`Завдання виконано! Ви отримали BP!`);
+        renderTasks(); // оновлюємо DOM після виконання
+    } else {
+        alert("Завдання ще не виконано!");
+    }
 }
 
 loadUser();
@@ -1038,11 +1040,10 @@ let openedCases = user.openedCases || {autumn:0, fallalt:0, autumnus:0, box:0, g
 function checkTasks() {
   tasks.forEach(task => {
     if (!task.completed && task.check()) {
-      task.reward();
       task.completed = true;
       saveUser();
       saveTasks();
-      alert(`✅ Завдання виконано: ${task.description}!`);
+      // alert прибрано
     }
   });
 }
@@ -1096,25 +1097,27 @@ function deleteProgress() {
     }
 }
 
-function setPremium(active){
-    if(!currentUser) return;
+function setPremium(active) {
+    if (!currentUser) return;
     localStorage.setItem(currentUser + "_premiumActive", active ? "1" : "0");
 }
 
-function loadPremium(){
-    if(!currentUser) return false;
+function loadPremium() {
+    if (!currentUser) return false;
     return localStorage.getItem(currentUser + "_premiumActive") === "1";
 }
 
-if(loadPremium()){
-    console.log(currentUser + " має преміум!");
+function checkPremiumStatus() {
+    if (!currentUser) return false;
+    return loadPremium();
 }
 
-function applyPromoCode(){
+function applyPromoCode() {
+    if (!currentUser) return alert("Спочатку увійдіть в акаунт");
+    if (loadPremium()) return alert("Преміум уже активований!");
     setPremium(true);
     alert("Преміум активовано для " + currentUser);
 }
-
 
 window.onload = () => {
   loginScreen();
