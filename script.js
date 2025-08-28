@@ -846,6 +846,25 @@ const premiumPassLevels = [
   { level: 35, reward: "autumnus", type: "item" }
 ];
 
+function setPremium(active){
+    if(!currentUser) return;
+    localStorage.setItem(currentUser + "_premiumActive", active ? "1" : "0");
+}
+
+function loadPremium(){
+    if(!currentUser) return false;
+    return localStorage.getItem(currentUser + "_premiumActive") === "1";
+}
+
+if(loadPremium()){
+    console.log(currentUser + " має преміум!");
+}
+
+function applyPromoCode(){
+    setPremium(true);
+    alert("Преміум активовано для " + currentUser);
+}
+
 const totalLevels = 35;
 const bpPerLevel = 1000;
 
@@ -880,7 +899,8 @@ const container = document.getElementById("app");
         <h2>🎟️ FallPass 25</h2>
         <div style="display:flex; justify-content:space-around; margin-bottom:10px;">
             <button onclick="showPass('free')">Free Pass</button>
-            <button onclick="showPass('premium')">Premium Pass</button>
+     <button onclick="${premiumActive ? "showPass('premium')" : "alert('У вас немає преміуму!')"}">
+            Premium Pass
             <button onclick="openEventsMenu()">Назад</button>
         </div>
         <div id="fallPassContainer" style="overflow-x:auto; white-space:nowrap; padding:10px; border:1px solid #ccc; border-radius:10px;"></div>
@@ -931,26 +951,6 @@ lvlDiv.onclick = () => {
         alert("Ви вже забрали цю нагороду!");
     }
 };
-
-function setPremium(active){
-    if(!currentUser) return;
-    localStorage.setItem(currentUser + "_premiumActive", active ? "1" : "0");
-}
-
-function loadPremium(){
-    if(!currentUser) return false;
-    return localStorage.getItem(currentUser + "_premiumActive") === "1";
-}
-
-if(loadPremium()){
-    console.log(currentUser + " має преміум!");
-}
-
-function applyPromoCode(){
-    setPremium(true);
-    alert("Преміум активовано для " + currentUser);
-}
-
         container.appendChild(lvlDiv);
     });
 }
@@ -1003,19 +1003,35 @@ function saveUser() {
     localStorage.setItem("userData", JSON.stringify(user));
 }
 
+function addBalance(amount) {
+    if(!user) return;
+    user.balance += amount;
+    saveUser();
+    return user.balance;
+}
+
 loadUser();
+
 const tasks = [
-  {id:1, description:"Отримати 'Доге' або 'Нагетс'", reward:()=>addBP(2500), check:()=>inventory.some(i=>["Доге","Нагетс"].includes(i.name)), completed:false},
-{id:2,description:"Зібрати всі звичайні предмети ('Пасхалочник','Єнот','Дракон','Булінг-кіт')",reward:()=>addBP(2000),check:()=>["Пасхалочник","Єнот","Дракон","Булінг-кіт"].every(n=>inventory.some(i=>i.name===n)),completed:false},
-  {id:3, description:"Отримати всі виняткові предмети ('Сатана','Хамстер','Ракета-кіт','Хорор-кіт')", reward:()=>addBP(3000), check:()=>["Сатана","Хамстер","Ракета-кіт","Хорор-кіт"].every(n=>inventory.some(i=>i.name===n)), completed:false},
-  {id:4, description:"Отримати звичайний предмет у якості 'Зношена' ('Єнот','Посхалочник','Дракон','Булінг-кіт')", reward:()=>addBP(1000), check:()=>inventory.some(i=>["Єнот","Посхалочник","Дракон","Булінг-кіт"].includes(i.name)&&i.quality==="Зношена"), completed:false},
+  {id:1, description:"Отримати 'Доге' або 'Нагетс'", reward:()=>addBP(2500), check:()=>user.items.some(i=>["Доге","Нагетс"].includes(i.name)), completed:false},
+{id:2,description:"Зібрати всі звичайні предмети ('Пасхалочник','Єнот','Дракон','Булінг-кіт')",reward:()=>addBP(2000),check:()=>["Пасхалочник","Єнот","Дракон","Булінг-кіт"].every(n=>user.items.some(i=>i.name===n)),completed:false},
+  {id:3, description:"Отримати всі виняткові предмети ('Сатана','Хамстер','Ракета-кіт','Хорор-кіт')", reward:()=>addBP(3000), check:()=>["Сатана","Хамстер","Ракета-кіт","Хорор-кіт"].every(n=>user.items.some(i=>i.name===n)), completed:false},
+  {id:4, description:"Отримати звичайний предмет у якості 'Зношена' ('Єнот','Посхалочник','Дракон','Булінг-кіт')", reward:()=>addBP(1000), check:()=>user.items.some(i=>["Єнот","Посхалочник","Дракон","Булінг-кіт"].includes(i.name)&&i.quality==="Зношена"), completed:false},
   { id: 5, description: "Накопичити на балансі 250 нікусів", reward: () => addBP(1000), check: () => user.balance >= 250, completed: false },
   { id: 6, description: "Накопичити на балансі 500 нікусів", reward: () => addBP(4000), check: () => user.balance >= 500, completed: false },
-  { id: 7, description: "Зібрати 5 предметів будь-якої рідкості", reward: () => addBP(800), check: () => user.items.length >= 5, completed: false },
+  { id: 7, description: "Зібрати 5 предметів будь-якої рідкості", reward: () => addBP(800), check: () => inventory.length >= 5, completed: false },
   { id: 8, description: "Отримати будь-який секретний предмет ('Супермен', 'Бомбордіро', 'Тунг-Сахур', 'Тралалеро')", reward: () => addBP(4000), check: () => user.items.some(i => ["Супермен", "Бомбордіро", "Тунг-Сахур", "Тралалеро"].includes(i.name)), completed: false },
   { id: 9, description: "Отримати предмет якості 'Прямо з цеху'", reward: () => addBP(1000), check: () => user.items.some(i => i.quality === "Прямо з цеху"), completed: false },
   { id: 10, description: "Отримати будь-який предмет преміум", reward: () => addBP(1500), check: () => user.items.some(i => i.premium === true), completed: false }
 ];
+
+function checkTasks() {
+  tasks.forEach(task => {
+    if (!task.completed && task.check()) {
+      completeTask(task.id);
+    }
+  });
+}
 
 function saveTasks() {
     localStorage.setItem("tasksData", JSON.stringify(tasks.map(t => ({id: t.id, completed: t.completed}))));
@@ -1051,18 +1067,6 @@ function completeTask(taskId) {
 loadUser();
 loadTasks(); // спочатку завантажуємо стан завдань
 let openedCases = user.openedCases || {autumn:0, fallalt:0, autumnus:0, box:0, gift:0};
-
-function checkTasks() {
-  tasks.forEach(task => {
-    if (!task.completed && task.check()) {
-      task.reward();
-      task.completed = true;
-      saveUser();
-      saveTasks();
-      alert(`✅ Завдання виконано: ${task.description}!`);
-    }
-  });
-}
 
 function performAction(actionType, payload) {
     switch(actionType) {
