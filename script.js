@@ -257,11 +257,11 @@ function openCase(idx){
 // FallAlternative25
 function dropFallAlternative25Case(){
   const pool = [
-    {name:"Супермен", img:"superman.png", rarity:"Секретна", chance:0.02},
-    {name:"Нагетс", img:"nugget.png", rarity:"Епічна", chance:0.05},
-    {name:"Доге", img:"doge.png", rarity:"Епічна", chance:0.05},
-    {name:"Ракета-кіт", img:"rocketcat.png", rarity:"Виняткова", chance:0.19},
-    {name:"Хорор-кіт", img:"horrorcat.png", rarity:"Виняткова", chance:0.19},
+    {name:"Супермен", img:"superman.png", rarity:"Секретна", chance:0.01},
+    {name:"Нагетс", img:"nugget.png", rarity:"Епічна", chance:0.075},
+    {name:"Доге", img:"doge.png", rarity:"Епічна", chance:0.075},
+    {name:"Ракета-кіт", img:"rocketcat.png", rarity:"Виняткова", chance:0.17},
+    {name:"Хорор-кіт", img:"horrorcat.png", rarity:"Виняткова", chance:0.17},
     {name:"Дракон", img:"dragon.png", rarity:"Звичайна", chance:0.25},
     {name:"Булінг-кіт", img:"bullycat.png", rarity:"Звичайна", chance:0.25}
   ];
