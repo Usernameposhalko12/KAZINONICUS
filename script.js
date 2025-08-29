@@ -1115,7 +1115,19 @@ const promoCodesBase64 = {
   "QVVUSFVNMTIzMTQ4OA==":{type:"unlimited",reward:()=>{addCase("autumnus");alert("Отримано кейс Autumnus25!");}},
   "T05DRTEwMDBCUA==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
   "VU4xMDAwQlA=": {type:"unlimited", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
-
+  "QlBCT09TVA==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},  
+  "TElDS1kyNQ==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},  
+  "RVhUUkE1MA==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},  
+  "RkFTVEJQ": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},      
+  "TElWRUxVUA==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}}, 
+  "RE9HRVJQ": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}}       
+  "Qk9YRlVO": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},   
+  "Qk9YTFVDSw==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},
+  "Qk9YVklQ": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},    
+  "Qk9YSFlQRQ==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},
+  "Qk9YRFJPUA==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},
+  "Qk9YU1VSUA==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},
+  
 "VU5MT0NLUFJFTUlVTQ==": {
   type: "unlimited",
   reward: () => {
