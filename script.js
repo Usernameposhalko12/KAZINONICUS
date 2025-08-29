@@ -1115,8 +1115,7 @@ const promoCodesBase64 = {
   "QVVUSFVNMTIzMTQ4OA==":{type:"unlimited",reward:()=>{addCase("autumnus");alert("Отримано кейс Autumnus25!");}},
   "T05DRTEwMDBCUA==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
   "VU4xMDAwQlA=": {type:"unlimited", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
-
-  "VU5MT0NLUFJFTUlVTQ==": {
+"VU5MT0NLUFJFTUlVTQ==": {
   type: "unlimited",
   reward: () => {
       const btn = document.getElementById("premiumBtn");
