@@ -1120,7 +1120,7 @@ const promoCodesBase64 = {
   "RVhUUkE1MA==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},  
   "RkFTVEJQ": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},      
   "TElWRUxVUA==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}}, 
-  "RE9HRVJQ": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}}       
+  "RE9HRVJQ": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},     
   "Qk9YRlVO": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},   
   "Qk9YTFVDSw==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},
   "Qk9YVklQ": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},    
