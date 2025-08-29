@@ -1115,8 +1115,17 @@ const promoCodesBase64 = {
   "QVVUSFVNMTIzMTQ4OA==":{type:"unlimited",reward:()=>{addCase("autumnus");alert("Отримано кейс Autumnus25!");}},
   "T05DRTEwMDBCUA==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
   "VU4xMDAwQlA=": {type:"unlimited", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
+"Qk9YMQ==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},  
+"Qk9YMg==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},  
+"Qk9YMw==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},  
+"T0M1MQ==": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},  
+"T0M1Mg==": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},  
+"T0M1Mw==": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},  
+"QlBQMDE=": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},  
+"QlBQMg==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},  
+"QlBQMw==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
 
-"VU5MT0NLUFJFTUlVTQ==": {
+  "VU5MT0NLUFJFTUlVTQ==": {
   type: "unlimited",
   reward: () => {
       const btn = document.getElementById("premiumBtn");
