@@ -230,6 +230,7 @@ function getCaseName(type){
   if(type === "gift") return "Подарунковий кейс";
   if(type === "fallalt") return "FallAlternative25";
   if(type === "autumnus") return "Autumnus25";
+  if(type === "harvest") return "Harvest25"; 
   return "Невідомий кейс";
 }
 
@@ -244,6 +245,7 @@ function openCase(idx){
   else if(item.caseType === "gift") drop = dropGiftCase();
   else if(item.caseType === "fallalt") drop = dropFallAlternative25Case();
   else if(item.caseType === "autumnus") drop = dropAutumnus25Case();
+  else if(item.caseType === "harvest") drop = dropHarvest25Case();
 
   if(drop){
     inventory.splice(idx, 1);
@@ -252,6 +254,21 @@ function openCase(idx){
     alert(`Вам випало: ${drop.name} (${drop.rarity}${drop.premium ? ", Преміум" : ""})`);
     showInventory();
   }
+}
+
+function dropHarvest25Case(){
+  const pool = [
+    {name:"Бобер", img:"beaver.png", rarity:"Епічна", chance:0.15},
+    {name:"Квадробер", img:"quadbeaver.png", rarity:"Виняткова", chance:0.35},
+    {name:"Веном", img:"venom.png", rarity:"Звичайна", chance:0.50}
+  ];
+
+  let r = Math.random(), sum = 0;
+  for(const p of pool){
+    sum += p.chance;
+    if(r < sum) return createItem(p);
+  }
+  return createItem(pool[pool.length-1]);
 }
 
 // FallAlternative25
@@ -1124,6 +1141,9 @@ const promoCodesBase64 = {
 "QlAxMjM=": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},  
 "QlAxNDg3": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},  
 "QlA1Mg==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
+"SEFSVkVTVEJPTFg=": {type:"once", reward:()=>{addCase("harvest"); alert("Отримано кейс Harvest25!");}},  
+"SEFSVkVTVEZVTg==": {type:"once", reward:()=>{addCase("harvest"); alert("Отримано кейс Harvest25!");}},  
+"SEFSVkVTVE5BVFVSQUw=": {type:"unlimited", reward:()=>{addCase("harvest"); alert("Отримано кейс Harvest25!");}},
 
   "VU5MT0NLUFJFTUlVTQ==": {
   type: "unlimited",
