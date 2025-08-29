@@ -945,7 +945,7 @@ function openTasksMenu() {
 
     let tasksHTML = tasks.map(t => {
         return `
-            <div style="padding:10px; margin-bottom:5px; border-radius:5px; background-color:${t.completed ? '#d4edda' : '#D49F37'};">
+            <div style="padding:10px; margin-bottom:5px; border-radius:5px; background-color:${t.completed ? '#64C466' : '#D49F37'};">
                 ${t.completed ? '✔' : '❌'} ${t.description}
             </div>
         `;
