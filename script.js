@@ -1128,7 +1128,7 @@ const promoCodesBase64 = {
   "TklMSU1JVEFVVDI1": {type:"unlimited", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},
   "WVNFTExBVVRVU1QyNQ==": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},
   "RE9ESUsyNTBPS0FL": {type:"unlimited", reward:()=>{addBalance(250); alert("Отримано 250 нікусів!");}},
-  "TkFUVVJBTEE=":{type:"unlimited",reward:()=>{addCase("fallalt");alert("Отримано кейс FallAlternative25!");}},
+  "TkFUVVJBTDE0":{type:"unlimited",reward:()=>{addCase("fallalt");alert("Отримано кейс FallAlternative25!");}},
   "QVVUSFVNMTIzMTQ4OA==":{type:"unlimited",reward:()=>{addCase("autumnus");alert("Отримано кейс Autumnus25!");}},
   "T05DRTEwMDBCUA==": {type:"once", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
   "VU4xMDAwQlA=": {type:"unlimited", reward:()=>{addBP(1000); alert("Отримано 1000 BP!");}},
