@@ -260,7 +260,8 @@ function dropHarvest25Case(){
   const pool = [
     {name:"Бобер", img:"beaver.png", rarity:"Епічна", chance:0.15},
     {name:"Квадробер", img:"quadbeaver.png", rarity:"Виняткова", chance:0.35},
-    {name:"Веном", img:"venom.png", rarity:"Звичайна", chance:0.50}
+    {name:"Веном", img:"venom.png", rarity:"Звичайна", chance:0.49},
+    {name:"Ліларіла", img:"lalirala.png", rarity:"Секретна", chance:0.01}
   ];
 
   let r = Math.random(), sum = 0;
