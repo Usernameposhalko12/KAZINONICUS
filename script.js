@@ -294,10 +294,11 @@ function dropFallAlternative25Case(){
 
 function dropAutumnus25Case(){
   const pool = [
-    {name:"Супермен", img:"superman.png", rarity:"Секретна", chance:0.05},
-    {name:"Бомбордіро", img:"red1.png", rarity:"Секретна", chance:0.05},
-    {name:"Тралалеро", img:"red2.png", rarity:"Секретна", chance:0.05},
-    {name:"Тунг-Сахур", img:"red3.png", rarity:"Секретна", chance:0.05},
+    {name:"Ліларіла", img:"lalirala.png", rarity:"Секретна", chance:0.04},
+    {name:"Супермен", img:"superman.png", rarity:"Секретна", chance:0.04},
+    {name:"Бомбордіро", img:"red1.png", rarity:"Секретна", chance:0.04},
+    {name:"Тралалеро", img:"red2.png", rarity:"Секретна", chance:0.04},
+    {name:"Тунг-Сахур", img:"red3.png", rarity:"Секретна", chance:0.04},
     {name:"Булінг-кіт", img:"bullycat.png", rarity:"Звичайна", chance:0.80}
   ];
 
@@ -1006,13 +1007,13 @@ loadUser();
 
 const tasks = [
   {id:1, description:"Отримати 'Доге' або 'Нагетс'", reward:()=>addBP(2500), check:()=> inventory.some(i=>["Доге","Нагетс"].includes(i.name)), completed:false},
-{id:2,description:"Зібрати всі звичайні предмети ('Пасхалочник','Єнот','Дракон','Булінг-кіт')",reward:()=>addBP(2000),check:()=>["Пасхалочник","Єнот","Дракон","Булінг-кіт"].every(n=> inventory.some(i=>i.name===n)),completed:false},
+{id:2,description:"Зібрати всі звичайні предмети ('Пасхалочник','Єнот','Дракон','Булінг-кіт')",reward:()=>addBP(2000),check:()=>["Посхалочник","Єнот","Дракон","Булінг-кіт"].every(n=> inventory.some(i=>i.name===n)),completed:false},
   {id:3, description:"Отримати всі виняткові предмети ('Сатана','Хамстер','Ракета-кіт','Хорор-кіт')", reward:()=>addBP(3000), check:()=>["Сатана","Хамстер","Ракета-кіт","Хорор-кіт"].every(n=> inventory.some(i=>i.name===n)), completed:false},
   {id:4, description:"Отримати звичайний предмет у якості 'Зношена' ('Єнот','Дракон','Булінг-кіт')", reward:()=>addBP(1000), check:()=> inventory.some(i=>["Єнот","Посхалочник","Дракон","Булінг-кіт"].includes(i.name)&&i.quality==="Зношена"), completed:false},
 { id: 5, description: "Накопичити на балансі 250 нікусів", reward: () => addBP(1000), check: () => balance >= 250, completed: false },
 { id: 6, description: "Накопичити на балансі 500 нікусів", reward: () => addBP(4000), check: () => balance >= 500, completed: false },
   { id: 7, description: "Зібрати 5 предметів будь-якої рідкості", reward: () => addBP(1000), check: () => inventory.length >= 5, completed: false },
-  { id: 8, description: "Отримати будь-який секретний предмет ('Супермен', 'Бомбордіро', 'Тунг-Сахур', 'Тралалеро')", reward: () => addBP(4000), check: () => inventory.some(i => ["Супермен", "Бомбордіро", "Тунг-Сахур", "Тралалеро"].includes(i.name)), completed: false },
+  { id: 8, description: "Отримати будь-який секретний предмет ('Ліларіла', 'Супермен', 'Бомбордіро', 'Тунг-Сахур', 'Тралалеро')", reward: () => addBP(4000), check: () => inventory.some(i => ["Супермен", "Бомбордіро", "Тунг-Сахур", "Тралалеро"].includes(i.name)), completed: false },
   { id: 9, description: "Отримати предмет якості 'Прямо з цеху'", reward: () => addBP(1000), check: () => inventory.some(i => i.quality === "Прямо з цеху"), completed: false },
   { id: 10, description: "Отримати будь-який предмет преміум", reward: () => addBP(1500), check: () => inventory.some(i => i.premium === true), completed: false }
 ];
