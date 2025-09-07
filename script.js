@@ -143,6 +143,15 @@ function buyCase(type){
   mainMenu();
 }
 
+function addKey(caseId){
+    inventory.push({
+        type: "key",
+        keyType: caseId,
+        name: caseId + " Key",
+        img: "key_" + caseId + ".png"
+    });
+}
+
 function addCase(caseType){
   if(!currentUser) return;
   if(inventory.length >= 100){
@@ -161,15 +170,18 @@ function addCase(caseType){
   alert(`Отримано: ${getCaseName(caseType)}`);
 }
 
-function showInventory(){
+
+function showInventory() {
   let html = `<h2>Інвентар</h2>`;
-  if(inventory.length === 0){
+  if (inventory.length === 0) {
     html += `<p>Інвентар порожній.</p>`;
   } else {
     html += `<div style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center;">`;
+
     inventory.forEach((item, idx) => {
       const isBlocked = blockedItems.has(item.id);
-      if(item.type === "case"){
+
+      if (item.type === "case") {
         html += `
           <div style="border:1px solid #999; padding:10px; width:150px; text-align:center; margin-bottom:10px;">
             <b>Кейс: ${getCaseName(item.caseType)}</b><br/>
@@ -179,7 +191,7 @@ function showInventory(){
             <button onclick="deleteItem(${idx}); event.stopPropagation();" ${isBlocked ? "disabled" : ""} style="margin-top:5px;">Видалити</button>
           </div>
         `;
-      } else if(item.type === "item"){
+      } else if (item.type === "item") {
         html += `
           <div style="border:1px solid #666; padding:10px; width:180px; text-align:center; background:#222; color:#fff; margin-bottom:10px; border-radius:8px;">
             <b>${item.name}</b><br/>
@@ -195,10 +207,22 @@ function showInventory(){
             <button onclick="deleteItem(${idx}); event.stopPropagation();" ${isBlocked ? "disabled" : ""} style="margin-top:5px;">Видалити</button>
           </div>
         `;
+      } else if (item.type === "key") {
+        html += `
+          <div style="border:1px solid #999; padding:10px; width:150px; text-align:center; margin-bottom:10px;">
+            <b>Arcade Case Key</b><br/>
+            <img src="img/key_arcase.png" width="120" /><br/>
+            <div style="margin-top:3px; font-weight:bold;">Тип ключа: Arcade Case</div>
+            <button onclick="toggleBlock(${idx}); event.stopPropagation();">${isBlocked ? "Розблокувати" : "Заблокувати"}</button><br/>
+            <button onclick="deleteItem(${idx}); event.stopPropagation();" ${isBlocked ? "disabled" : ""} style="margin-top:5px;">Видалити</button>
+          </div>
+        `;
       }
     });
+
     html += "</div>";
   }
+
   html += `<br/><button onclick="mainMenu()">Назад</button>`;
   document.getElementById("app").innerHTML = html;
 }
@@ -231,14 +255,16 @@ function getCaseName(type){
   if(type === "fallalt") return "FallAlternative25";
   if(type === "autumnus") return "Autumnus25";
   if(type === "harvest") return "Harvest25"; 
+  if(type === "arcase") return "ArcadeCase";
   return "Невідомий кейс";
 }
 
-function openCase(idx){
+ function openCase(idx){
   if(!inventory[idx]) return;
   const item = inventory[idx];
   if(item.type !== "case") return;
 
+  // Згенеруємо дроп за типом кейсу (робиться один раз)
   let drop = null;
   if(item.caseType === "autumn") drop = dropAutumnCase();
   else if(item.caseType === "box") drop = dropBoxCase();
@@ -246,14 +272,70 @@ function openCase(idx){
   else if(item.caseType === "fallalt") drop = dropFallAlternative25Case();
   else if(item.caseType === "autumnus") drop = dropAutumnus25Case();
   else if(item.caseType === "harvest") drop = dropHarvest25Case();
+  else if(item.caseType === "arcase") drop = dropArcadeCase();
 
-  if(drop){
+  // Якщо кейс аркадний — перевіряємо наявність ключа
+  if(item.caseType === "arcase"){
+    const keyIdx = inventory.findIndex(i => i.type === "key" && i.keyType === "arcase");
+    if(keyIdx === -1) return; // ключа немає — не відкривати
+
+    // видаляємо обидва елементи в правильному порядку (спочатку більший індекс)
+    if(keyIdx > idx){
+      inventory.splice(keyIdx, 1);
+      inventory.splice(idx, 1);
+    } else if(keyIdx < idx){
+      inventory.splice(idx, 1);
+      inventory.splice(keyIdx, 1);
+    } else { // кейс і ключ в одному індексі (нереально, але на всяк випадок)
+      inventory.splice(idx, 1);
+    }
+  } else {
+    // інші кейси: просто видаляємо цей кейс
     inventory.splice(idx, 1);
-    inventory.push(drop);
-    saveData();
-    alert(`Вам випало: ${drop.name} (${drop.rarity}${drop.premium ? ", Преміум" : ""})`);
-    showInventory();
   }
+
+  if(drop) inventory.push(drop);
+
+  saveData();
+  showInventory();
+}
+
+function createKeyForCase(caseType, name, img){
+  return {
+    name: name || "АркадКлюч",
+    type: "key",
+    keyType: caseType || "arcase",
+    rarity: "Секретна",
+    img: img || "Key1.png"
+};
+}
+
+const arcadeKey = {
+    name: "Arcade Case Key",
+    type: "key",
+    keyType: "arcase", // стара назва кейсу
+    img: "key_arcase.png",
+    rarity: "Секретна"
+};
+
+function dropArcadeCase(){
+  const pool = [
+    {name:"Скелет", img:"skeleton.png", rarity:"Секретна", chance:0.005},
+    {name:"Мужик", img:"man.png", rarity:"Секретна", chance:0.005},
+    {name:"Арбітражнік", img:"arbitrajnik.png", rarity:"Епічна", chance:0.10},
+    {name:"Такблін", img:"takblin.png", rarity:"Епічна", chance:0.10},
+    {name:"ЧомуКіт", img:"chomukit.png", rarity:"Виняткова", chance:0.15},
+    {name:"Картофель", img:"kartofel.png", rarity:"Виняткова", chance:0.15},
+    {name:"Щотинакоїв", img:"shotinakoiv.png", rarity:"Звичайна", chance:0.245},
+    {name:"Услезах", img:"uslezah.png", rarity:"Звичайна", chance:0.245}
+  ];
+
+  let r = Math.random(), sum = 0;
+  for(const p of pool){
+    sum += p.chance;
+    if(r < sum) return createItem(p);
+  }
+  return createItem(pool[pool.length-1]);
 }
 
 function dropHarvest25Case(){
@@ -271,7 +353,6 @@ function dropHarvest25Case(){
   }
   return createItem(pool[pool.length-1]);
 }
-
 // FallAlternative25
 function dropFallAlternative25Case(){
   const pool = [
@@ -554,18 +635,37 @@ function startSaper() {
         document.getElementById("app").innerHTML=html;
     }
 
-    window.reveal=function(r,c){
-        if(revealed[r][c] || exploded) return;
-        revealed[r][c]=true;
-        if(board[r][c]==="M"){
-            exploded=true;
-            saperScore=0;
-        } else {
-            saperScore += 4;
+   window.reveal=function(r,c){
+    if(revealed[r][c] || exploded) return;
+    revealed[r][c]=true;
+
+    if(board[r][c]==="M"){
+        exploded=true;
+        saperScore=0;
+    } else {
+        let oldScore = saperScore;   // ✅ зберігаємо старий результат
+        saperScore += 4;
+
+        // 🎁 Перевірка на 30, 60, 90...
+        let oldMilestone = Math.floor(oldScore / 30);
+        let newMilestone = Math.floor(saperScore / 30);
+
+        if(newMilestone > oldMilestone){
+            for(let i = oldMilestone + 1; i <= newMilestone; i++){
+                if(Math.random() < 0.5){
+                    addCase("arcase");  
+                    alert("🎁 Вам випав Arcade Case!");
+                } else {
+                    addKey("arcase");   
+                    alert("🔑 Вам випав Arcade Case Key!");
+                }
+            }
+            saveData();
         }
-        renderBoard();
     }
 
+    renderBoard();
+};
     window.stopSaper=function(){
         addBalance(saperScore);
         alert(`Гра завершена! Отримано ${saperScore} нікусів.`);
@@ -671,10 +771,10 @@ function openEventsMenu() {
                 <button style="padding:10px 20px; font-size:16px;" onclick="mainMenu()">Назад</button>
             </div>
         </div>
-        <h3>Майбутні івенти</h3>
+        <h3>Інше</h3>
         <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
-            <button style="padding:10px 20px; font-size:16px;" disabled>Майбутній івент 1</button>
-            <button style="padding:10px 20px; font-size:16px;" disabled>Майбутній івент 2</button>
+            <button style="padding:10px 20px; font-size:16px;" onclick="showBlackMarket()">Чорний Ринок</button>
+            <button style="padding:10px 20px; font-size:16px;" disabled>Майбутній івент </button>
             <button style="padding:10px 20px; font-size:16px;" onclick="openTasksMenu()">Завдання 🎯</button>
         </div>
     `;
@@ -700,11 +800,11 @@ const fallPassImages = {
     7: "case_gift.png",
     8: "case_fallalt.png",
     9: "case_box.png",
-    10: "case_fallalt.png",
+    10: "case_arcase.png",
     11: "money.png",
     12: "case_box.png",
     13: "case_fallalt.png",
-    14: "case_fallalt.png",
+    14: "case_arcase.png",
     15: "case_fallalt.png",
     16: "case_box.png",
     17: "case_fallalt.png",
@@ -749,22 +849,23 @@ const fallPassImages = {
     19: "case_gift.png",
     20: "case_fallalt.png",
     21: "case_harvest.png",
-    22: "case_fallalt.png",
+    22: "case_arcase.png",
     23: "case_fallalt.png",
     24: "case_gift.png",
     25: "case_harvest.png",
     26: "money.png",
     27: "case_autumn.png",
     28: "case_fallalt.png",
-    29: "case_fallalt.png",
+    29: "case_arcase.png",
     30: "case_fallalt.png",
     31: "money.png",
     32: "case_harvest.png",
-    33: "case_gift.png",
-    34: "case_autumnus.png",
+    33: "case_arcase.png",
+    34: "case_arcase.png",
     35: "case_autumnus.png"
   }
 };
+
 
 // ----------------- рівні Free Pass -----------------
 const freePassLevels = [
@@ -777,11 +878,11 @@ const freePassLevels = [
   { level: 7, reward: "gift", type: "item" },
   { level: 8, reward: "fallalt", type: "item" },
   { level: 9, reward: "box", type: "item" },
-  { level: 10, reward: "fallalt", type: "item" },
+  { level: 10, reward: "arcase", type: "item"},
   { level: 11, reward: 50, type: "coins" },
   { level: 12, reward: "box", type: "item" },
   { level: 13, reward: "fallalt", type: "item" },
-  { level: 14, reward: "fallalt", type: "item" },
+  { level: 14, reward: "arcase", type: "item" },
   { level: 15, reward: "fallalt", type: "item" },
   { level: 16, reward: "box", type: "item" },
   { level: 17, reward: "fallalt", type: "item" },
@@ -828,19 +929,19 @@ const premiumPassLevels = [
   { level: 19, reward: "gift", type: "item" },
   { level: 20, reward: "fallalt", type: "item" },
   { level: 21, reward: "harvest", type: "item" },
-  { level: 22, reward: "fallalt", type: "item" },
+  { level: 22, reward: "arcase", type: "item"},
   { level: 23, reward: "fallalt", type: "item" },
   { level: 24, reward: "gift", type: "item" },
   { level: 25, reward: "harvest", type: "item" },
   { level: 26, reward: 250, type: "coins" },
   { level: 27, reward: "autumn", type: "item" },
   { level: 28, reward: "fallalt", type: "item" },
-  { level: 29, reward: "fallalt", type: "item" },
+  { level: 29, reward: "arcase", type: "item" },
   { level: 30, reward: "fallalt", type: "item" },
   { level: 31, reward: 300, type: "coins" },
   { level: 32, reward: "harvest", type: "item" },
-  { level: 33, reward: "gift", type: "item" },
-  { level: 34, reward: "autumnus", type: "item" },
+  { level: 33, reward: "arcase", type: "item"},
+  { level: 34, reward: "arcase", type: "item" },
   { level: 35, reward: "autumnus", type: "item" }
 ];
 
@@ -1013,7 +1114,7 @@ const tasks = [
 { id: 5, description: "Накопичити на балансі 250 нікусів", reward: () => addBP(1000), check: () => balance >= 250, completed: false },
 { id: 6, description: "Накопичити на балансі 500 нікусів", reward: () => addBP(4000), check: () => balance >= 500, completed: false },
   { id: 7, description: "Зібрати 5 предметів будь-якої рідкості", reward: () => addBP(1000), check: () => inventory.length >= 5, completed: false },
-  { id: 8, description: "Отримати будь-який секретний предмет ('Ліларіла', 'Супермен', 'Бомбордіро', 'Тунг-Сахур', 'Тралалеро')", reward: () => addBP(4000), check: () => inventory.some(i => ["Ліларіла", "Супермен", "Бомбордіро", "Тунг-Сахур", "Тралалеро"].includes(i.name)), completed: false },
+  { id: 8, description: "Отримати будь-який секретний предмет ('Ліларіла', 'Супермен', 'Мужик', 'Бомбордіро', 'Скелет', 'Тунг-Сахур', 'Тралалеро')", reward: () => addBP(4000), check: () => inventory.some(i => ["Ліларіла", "Супермен", "Скелет", "Бомбордіро", "Тунг-Сахур", "Мужик", "Тралалеро"].includes(i.name)), completed: false },
   { id: 9, description: "Отримати предмет якості 'Прямо з цеху'", reward: () => addBP(1000), check: () => inventory.some(i => i.quality === "Прямо з цеху"), completed: false },
   { id: 10, description: "Отримати будь-який предмет преміум", reward: () => addBP(1500), check: () => inventory.some(i => i.premium === true), completed: false }
 ];
@@ -1146,6 +1247,28 @@ const promoCodesBase64 = {
 "SEFSVkVTVEJPTFg=": {type:"once", reward:()=>{addCase("harvest"); alert("Отримано кейс Harvest25!");}},  
 "SEFSVkVTVEZVTg==": {type:"once", reward:()=>{addCase("harvest"); alert("Отримано кейс Harvest25!");}},  
 "SEFSVkVTVE5BVFVSQUw=": {type:"unlimited", reward:()=>{addCase("harvest"); alert("Отримано кейс Harvest25!");}},
+  "QUlSQ0FTRUNBU0U=": {type:"once", reward:()=>{addCase("arcase"); alert("Отримано Аркад кейс!");}},
+  "QUJPQkE=": {type:"once", reward:()=>{addCase("arcase"); alert("Отримано Аркад кейс!");}},
+
+"UEVSTU9LRVk=": {type:"once", reward:()=>{
+    inventory.push(createKeyForCase("arcase", "ключ Аркад", "img/key_arcase.png"));
+    alert("Отримано ключ Аркад!");
+}},
+
+  "S0VZS0VZS0VZ": {
+    type:"once",
+    reward:()=> {
+      inventory.push(createKeyForCase("arcase", "img/key_arcase.png"));
+      alert("Отримано ключ!");
+    }
+  },
+
+  "QVJJQlRSQVRJT04=": {
+    type:"once",
+    reward:()=> {
+      inventory.push(createKeyForCase("arcase", "img/key_arcase.png"));
+      alert("Отримано ключ!");
+    }},
 
   "VU5MT0NLUFJFTUlVTQ==": {
   type: "unlimited",
@@ -1161,6 +1284,67 @@ alert("Кнопка Premium Pass розблокована!");
 }
 
 };
+
+const blackMarket = {
+  gift: { name: "Подарунковий кейс", price: 60, caseType: "gift" },
+  arcase: { name: "Аркадний кейс", price:15, caseType: "arcase" },
+  arcaseKey: { name: "Ключ від Аркадного кейсу", price:50, caseType: "arcase", isKey: true }
+};
+
+function buyCaseFromBlackMarket(key){
+  const marketItem = blackMarket[key];
+  if(!marketItem) return alert("Цей предмет не продається на Чорному ринку!");
+
+  if(balance < marketItem.price){
+    return alert("У вас недостатньо нікусів для покупки!");
+  }
+
+  balance -= marketItem.price;
+
+  if(marketItem.isKey){
+    // Додаємо ключ
+    inventory.push(createKeyForCase(marketItem.caseType, marketItem.name, `img/key_${marketItem.caseType}.png`));
+  } else {
+    // Додаємо кейс
+    inventory.push({
+      id: generateId(),
+      name: marketItem.name,
+      type: "case",
+      caseType: marketItem.caseType,
+      rarity: "Звичайна",
+      img: `img/case_${marketItem.caseType}.png`
+    });
+  }
+
+  saveData();
+  showBlackMarket();
+  alert(`Ви купили ${marketItem.name} за ${marketItem.price} нікусів!`);
+}
+
+function showBlackMarket(){
+  let html = `<h2>Чорний Ринок</h2>`;
+  html += `<p>Баланс: ${balance} нікусів</p>`;
+  html += `<div style="display:flex; gap:20px; flex-wrap:wrap;">`;
+
+  for(const key in blackMarket){
+    const item = blackMarket[key];
+    const imgPath = item.isKey ? `img/key_${item.caseType}.png` : `img/case_${item.caseType}.png`;
+
+    html += `
+      <div style="text-align:center; border:1px solid #333; padding:10px; border-radius:5px; width:150px;">
+        <img src="${imgPath}" alt="${item.name}" style="width:100px; height:100px;"><br>
+        <b>${item.name}</b><br>
+        Ціна: ${item.price} нікусів<br>
+        <button onclick="buyCaseFromBlackMarket('${key}')">Купити</button>
+      </div>
+    `;
+  }
+
+  html += `</div><br/><button onclick="mainMenu()">Назад в інвентар</button>`;
+
+  document.getElementById("app").innerHTML = html;
+}
+
 window.onload = () => {
   loginScreen();
 };
