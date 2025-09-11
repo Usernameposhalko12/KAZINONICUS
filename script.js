@@ -112,7 +112,7 @@ function mainMenu() {
       </div>
       <div style="text-align:center;">
         <img src="img/case_box.png" width="150" /><br/>
-        <button onclick="buyCase('box')">Бокс Осінь25 (20 нікусів)</button>
+        <button onclick="buyCase('box')">Бокс Осінь25 (30 нікусів)</button>
       </div>
       <div style="text-align:center;">
         <img src="img/case_gift.png" width="150" /><br/>
@@ -132,7 +132,7 @@ function mainMenu() {
 }
 
 function buyCase(type){
-  const cost = type === "autumn" ? 40 : (type === "box" ? 20 : 0);
+  const cost = type === "autumn" ? 40 : (type === "box" ? 30 : 0);
   if(balance < cost){
     alert("Недостатньо нікусів!");
     return;
