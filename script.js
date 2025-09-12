@@ -477,7 +477,7 @@ function dropAutumnCase(){
 }
 
 function dropBoxCase(){
-  const rates = {secret:0, epic:0.10, exceptional:0.30, common:0.60};
+  const rates = {secret:0, epic:0.05, exceptional:0.20, common:0.75};
   let rarity = dropByRates(rates);
 
   if(rarity === "epic"){
