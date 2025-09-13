@@ -107,11 +107,11 @@ function mainMenu() {
   html += `
     <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
       <div style="text-align:center;">
-        <img src="img/case_autumn.png" width="150" /><br/>
+        <img src="img/case_autumn.png" width="180" /><br/>
         <button onclick="buyCase('autumn')">Кейс Осінь25 (40 нікусів)</button>
       </div>
       <div style="text-align:center;">
-        <img src="img/case_box.png" width="150" /><br/>
+        <img src="img/case_box.png" width="180" /><br/>
         <button onclick="buyCase('box')">Бокс Осінь25 (30 нікусів)</button>
       </div>
       <div style="text-align:center;">
