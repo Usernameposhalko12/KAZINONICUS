@@ -575,8 +575,22 @@ function arcadeMenu() {
     `;
 }
 
+function giveArcadeRewards(score) {
+    let milestones = Math.floor(score / 30);
+    for (let i = 0; i < milestones; i++) {
+        if (Math.random() < 0.5) {
+            addCase("arcase");
+            alert("🎁 Вам випав Arcade Case!");
+        } else {
+            addKey("arcase");
+            alert("🔑 Вам випав Arcade Case Key!");
+        }
+    }
+}
+
+// ===== Сапер =====
 function startSaperPaid() {
-    if(balance < 20){
+    if (balance < 20) {
         alert("Недостатньо нікусів для гри в Сапер!");
         return;
     }
@@ -588,95 +602,85 @@ function startSaper() {
     let rows = 8, cols = 8, minesCount = 10;
     let board = [], revealed = [], exploded = false, saperScore = 0;
 
-    for(let r=0;r<rows;r++){
-        board[r]=[]; revealed[r]=[];
-        for(let c=0;c<cols;c++){ board[r][c]=0; revealed[r][c]=false; }
+    for (let r = 0; r < rows; r++) {
+        board[r] = []; revealed[r] = [];
+        for (let c = 0; c < cols; c++) { board[r][c] = 0; revealed[r][c] = false; }
     }
 
-    let placed=0;
-    while(placed<minesCount){
-        let r=Math.floor(Math.random()*rows);
-        let c=Math.floor(Math.random()*cols);
-        if(board[r][c]===0){ board[r][c]="M"; placed++; }
+    let placed = 0;
+    while (placed < minesCount) {
+        let r = Math.floor(Math.random() * rows);
+        let c = Math.floor(Math.random() * cols);
+        if (board[r][c] === 0) { board[r][c] = "M"; placed++; }
     }
 
-    for(let r=0;r<rows;r++){
-        for(let c=0;c<cols;c++){
-            if(board[r][c]==="M") continue;
-            let count=0;
-            for(let dr=-1;dr<=1;dr++){
-                for(let dc=-1;dc<=1;dc++){
-                    let nr=r+dr,nc=c+dc;
-                    if(nr>=0&&nr<rows&&nc>=0&&nc<cols&&board[nr][nc]==="M") count++;
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            if (board[r][c] === "M") continue;
+            let count = 0;
+            for (let dr = -1; dr <= 1; dr++) {
+                for (let dc = -1; dc <= 1; dc++) {
+                    let nr = r + dr, nc = c + dc;
+                    if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && board[nr][nc] === "M") count++;
                 }
             }
-            board[r][c]=count;
+            board[r][c] = count;
         }
     }
 
-    function renderBoard(){
-        let html="<h2>Сапер</h2>";
-        html+=`<p>Очки: ${saperScore}</p>`;
-        html+="<table style='border-collapse:collapse; margin:auto;'>";
-        for(let r=0;r<rows;r++){
-            html+="<tr>";
-            for(let c=0;c<cols;c++){
-                let cellContent=revealed[r][c]?"✅":"❌";
-                if(revealed[r][c] && board[r][c]==="M") cellContent="💣";
-                html+=`<td style='width:30px;height:30px;border:1px solid #555;text-align:center;cursor:pointer;'
-                    onclick='reveal(${r},${c})'>${cellContent}</td>`;
+    function renderBoard() {
+        let html = "<h2>Сапер</h2>";
+        html += `<p>Очки: ${saperScore}</p>`;
+        html += "<table style='border-collapse:collapse; margin:auto;'>";
+        for (let r = 0; r < rows; r++) {
+            html += "<tr>";
+            for (let c = 0; c < cols; c++) {
+                let cellContent = revealed[r][c] ? "✅" : "❌";
+                if (revealed[r][c] && board[r][c] === "M") cellContent = "💣";
+                html += `<td style='width:30px;height:30px;border:1px solid #555;text-align:center;cursor:pointer;'
+                         onclick='reveal(${r},${c})'>${cellContent}</td>`;
             }
-            html+="</tr>";
+            html += "</tr>";
         }
-        html+="</table>";
-        if(!exploded) html+=`<button onclick="stopSaper()">Зупинитися</button>`;
-        if(exploded) html+="<p style='color:red; text-align:center;'>💥 Ви вибухнули! <button onclick='startSaperPaid()'>Нова гра (20 нікусів)</button></p>";
-        html+=`<br/><button onclick='arcadeMenu()'>⬅ Назад</button>`;
-        document.getElementById("app").innerHTML=html;
+        html += "</table>";
+        if (!exploded) html += `<button onclick="stopSaper()">Зупинитися</button>`;
+        if (exploded) html += `<p style='color:red; text-align:center;'>💥 Ви вибухнули! 
+                                 <button onclick='startSaperPaid()'>Нова гра (20 нікусів)</button></p>`;
+        html += `<br/><button onclick='arcadeMenu()'>⬅ Назад</button>`;
+        document.getElementById("app").innerHTML = html;
     }
 
-   window.reveal=function(r,c){
-    if(revealed[r][c] || exploded) return;
-    revealed[r][c]=true;
+    window.reveal = function (r, c) {
+        if (revealed[r][c] || exploded) return;
+        revealed[r][c] = true;
 
-    if(board[r][c]==="M"){
-        exploded=true;
-        saperScore=0;
-    } else {
-        let oldScore = saperScore;   // ✅ зберігаємо старий результат
-        saperScore += 4;
+        if (board[r][c] === "M") {
+            exploded = true;
+            saperScore = 0;
+        } else {
+            let oldScore = saperScore;
+            saperScore += 4;
 
-        // 🎁 Перевірка на 30, 60, 90...
-        let oldMilestone = Math.floor(oldScore / 30);
-        let newMilestone = Math.floor(saperScore / 30);
-
-        if(newMilestone > oldMilestone){
-            for(let i = oldMilestone + 1; i <= newMilestone; i++){
-                if(Math.random() < 0.5){
-                    addCase("arcase");  
-                    alert("🎁 Вам випав Arcade Case!");
-                } else {
-                    addKey("arcase");   
-                    alert("🔑 Вам випав Arcade Case Key!");
-                }
-            }
-            saveData();
+            let oldMilestone = Math.floor(oldScore / 30);
+            let newMilestone = Math.floor(saperScore / 30);
+            if (newMilestone > oldMilestone) giveArcadeRewards(saperScore);
         }
-    }
 
-    renderBoard();
-};
-    window.stopSaper=function(){
+        renderBoard();
+    };
+
+    window.stopSaper = function () {
         addBalance(saperScore);
         alert(`Гра завершена! Отримано ${saperScore} нікусів.`);
         arcadeMenu();
-    }
+    };
 
     renderBoard();
 }
 
-function startDinoPaid(){
-    if(balance<35){
+function startDinoPaid() {
+    if (typeof balance === "undefined") balance = 0;
+    if (balance < 35) {
         alert("Недостатньо нікусів для гри в Динозаврик!");
         return;
     }
@@ -685,76 +689,235 @@ function startDinoPaid(){
 }
 
 function startDino() {
-    document.getElementById("app").innerHTML=`
+    document.getElementById("app").innerHTML = `
         <h2>Динозаврик</h2>
         <p>Натискайте ПРОБІЛ або кнопку "Стрибок" для стрибка. Мета: уникати кактусів.</p>
-        <canvas id="dinoCanvas" width="600" height="150" style="border:1px solid #555; display:block; margin:auto;"></canvas>
-        <br/><button id="jumpBtn" style='font-size:22px; padding:15px 40px;'>Стрибок</button>
-        <br/><button onclick='arcadeMenu()'>⬅ Назад</button>
+        <div style="text-align:center">
+          <canvas id="dinoCanvas" width="600" height="150" style="border:1px solid #555; display:block; margin:auto; background:#f4e1b0"></canvas>
+          <div style="margin-top:10px;">
+            <button id="startBtn" style="font-size:18px; padding:10px 24px;" disabled>▶ Старт гри</button>
+            <button id="reloadBtn" style="font-size:18px; padding:10px 18px; margin-left:8px;">🔄 Перезавантажити PNG</button>
+            <span id="imgStatus" style="margin-left:12px; font-weight:600;">Завантаження PNG...</span>
+          </div>
+          <div style="margin-top:12px;">
+            <button id="jumpBtn" style="font-size:24px; padding:18px 48px;" disabled>Стрибок</button>
+            <button id="retryBtn" style="font-size:16px; padding:8px 18px; margin-left:8px; display:none;">Заново</button>
+            <button id="backBtn" style="font-size:16px; padding:8px 18px; margin-left:8px;">⬅ Назад</button>
+          </div>
+        </div>
     `;
 
+    const canvas = document.getElementById("dinoCanvas");
+    const ctx = canvas.getContext("2d");
+    const startBtn = document.getElementById("startBtn");
+    const reloadBtn = document.getElementById("reloadBtn");
+    const imgStatus = document.getElementById("imgStatus");
     const jumpBtn = document.getElementById("jumpBtn");
-    jumpBtn.addEventListener("pointerdown", jumpDino);
+    const retryBtn = document.getElementById("retryBtn");
+    const backBtn = document.getElementById("backBtn");
 
-    const canvas=document.getElementById("dinoCanvas");
-    const ctx=canvas.getContext("2d");
-    const dinoImg=new Image(); dinoImg.src="img/dino.png";
-    const cactusImg=new Image(); cactusImg.src="img/cactus.png";
+    let dinoImg = new Image();
+    let cactusImg = new Image();
+    let imgsLoaded = { dino: false, cactus: false };
+    let imgLoadToken = Date.now();
 
-    let dinoY=120, dinoV=0, gravity=0.6, jumping=false;
-    let obstacles=[], frame=0, score=0, gameOver=false, cactusCount=0;
+    let dino = { x: 50, y: 120, w: 30, h: 30, vy: 0 };
+    const gravity = 0.6;
+    const jumpVelocity = -12;
+    const groundY = 120;
 
-    function jumpDino(){
-        if(!jumping){ 
-            dinoV=-12;
-            jumping=true; 
-        } 
+    let obstacles = [];
+    let obstacleSpeed =5; 
+    let cactusCount = 0;
+
+    let gameRunning = false;
+    let spawnIntervalId = null;
+    let rafId = null;
+    let startTime = 0;
+    let score = 0;
+
+    function rectsOverlap(a, b) {
+        return !(a.x + a.w < b.x || a.x > b.x + b.w || a.y + a.h < b.y || a.y > b.y + b.h);
     }
 
-    window.addEventListener("keydown", e => { if(e.code==="Space") jumpDino(); });
-
-    function spawnCactus(){
-        cactusCount++;
-        let count=1;
-        if(cactusCount<=10) count=1;
-        else if(cactusCount<=30) count=Math.random()<0.5?2:1;
-        else count=Math.random()<0.3?3:2;
-        for(let i=0;i<count;i++){
-            obstacles.push({x:600+i*25, w:20, h:30});
-        }
+    function cleanupGameLoop() {
+        if (spawnIntervalId) { clearInterval(spawnIntervalId); spawnIntervalId = null; }
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
     }
 
-    function gameLoop(){
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        dinoV+=gravity; dinoY+=dinoV;
-        if(dinoY>120){ dinoY=120; dinoV=0; jumping=false; }
-        ctx.drawImage(dinoImg,50,dinoY,30,30);
+    function setImgSrcs() {
+        imgLoadToken = Date.now();
+        imgsLoaded.dino = imgsLoaded.cactus = false;
+        imgStatus.textContent = "Завантаження PNG...";
+        startBtn.disabled = true;
+        jumpBtn.disabled = true;
+        retryBtn.style.display = "none";
 
-        if(frame % 45 === 0) spawnCactus();
+        dinoImg = new Image();
+        cactusImg = new Image();
 
-        obstacles.forEach(o=>{ o.x-=4; ctx.drawImage(cactusImg,o.x,120,o.w,o.h); });
-        obstacles = obstacles.filter(o => o.x+o.w>0);
+        dinoImg.onload = () => { imgsLoaded.dino = true; updateImgStatus(); drawPreStart(); };
+        cactusImg.onload = () => { imgsLoaded.cactus = true; updateImgStatus(); };
 
-        for(let o of obstacles){
-            if(50<o.x+o.w && 80>o.x && dinoY<150 && dinoY+30>120){ gameOver=true; }
-        }
+        dinoImg.src = "img/dino.png?ts=" + imgLoadToken;
+        cactusImg.src = "img/cactus.png?ts=" + imgLoadToken;
+    }
 
-        if(!gameOver){
-            if(frame % 90 === 0) score++;
-            ctx.fillStyle="black"; ctx.fillText("Очки: "+score,500,20);
-            frame++;
-            requestAnimationFrame(gameLoop);
+    function updateImgStatus() {
+        if (imgsLoaded.dino && imgsLoaded.cactus) {
+            imgStatus.textContent = "PNG завантажені ✅";
+            startBtn.disabled = false;
         } else {
-            ctx.fillStyle="red";
-            ctx.fillText("💀 Game Over! Очки: "+score,200,80);
-            if(score>0){
-                addBalance(score);
-                alert("Гра завершена! Отримано "+score+" нікусів за ваш рахунок.");
-            }
+            imgStatus.textContent = "Завантаження PNG...";
+            startBtn.disabled = true;
         }
     }
 
-    gameLoop();
+    function drawPreStart() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#f4e1b0";
+        ctx.fillRect(0, groundY + dino.h, canvas.width, canvas.height - (groundY + dino.h));
+        if (imgsLoaded.dino) ctx.drawImage(dinoImg, dino.x, dino.y, dino.w, dino.h);
+        else { ctx.fillStyle = "#333"; ctx.fillRect(dino.x, dino.y, dino.w, dino.h); }
+        ctx.font = "14px Arial";
+        ctx.fillStyle = "#333";
+        ctx.fillText("Натисни ▶ Старт", 260, 30);
+    }
+
+    function spawnCactus() {
+        cactusCount++;
+        let count = 1;
+        if(score < 35){
+            if(cactusCount <= 10) count = 1;
+            else if(cactusCount <= 30) count = Math.random() < 0.5 ? 2 : 1;
+            else count = Math.random() < 0.3 ? 3 : 2;
+        } else {
+            if(Math.random() < 0.6) count = 3;
+            else if(Math.random() < 0.8) count = 2;
+            else count = 1;
+        }
+        for (let i = 0; i < count; i++) {
+            let xOffset = i * 25 + (cactusCount === 1 ? 200 : 0);
+            obstacles.push({ x: canvas.width + xOffset, y: groundY, w: 20, h: 30 });
+        }
+    }
+
+    function jumpDino() {
+        if (!gameRunning) return;
+        if (dino.y >= groundY - 0.1) dino.vy = jumpVelocity;
+    }
+
+    function keyHandler(e) {
+        if (e.code === "Space") {
+            e.preventDefault();
+            jumpDino();
+        }
+    }
+
+    function loop() {
+        dino.vy += gravity;
+        dino.y += dino.vy;
+        if (dino.y > groundY) { dino.y = groundY; dino.vy = 0; }
+
+        for (let o of obstacles) o.x -= obstacleSpeed;
+        obstacles = obstacles.filter(o => o.x + o.w > 0);
+
+        const dinoRect = { x: dino.x, y: dino.y, w: dino.w, h: dino.h };
+        for (let o of obstacles) {
+            if (rectsOverlap(dinoRect, o)) { finishGame(); return; }
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#f4e1b0";
+        ctx.fillRect(0, groundY + dino.h, canvas.width, canvas.height - (groundY + dino.h));
+
+        if (imgsLoaded.dino) ctx.drawImage(dinoImg, dino.x, dino.y, dino.w, dino.h);
+        else { ctx.fillStyle = "#333"; ctx.fillRect(dino.x, dino.y, dino.w, dino.h); }
+
+        for (let o of obstacles) {
+            if (imgsLoaded.cactus) ctx.drawImage(cactusImg, o.x, o.y, o.w, o.h);
+            else { ctx.fillStyle = "#070"; ctx.fillRect(o.x, o.y, o.w, o.h); }
+        }
+
+        score = Math.floor((Date.now() - startTime) / 1000);
+        ctx.fillStyle = "#000";
+        ctx.font = "16px Arial";
+        ctx.fillText("Очки: " + score, 500, 20);
+
+        rafId = requestAnimationFrame(loop);
+    }
+
+    function startGame() {
+        if (!imgsLoaded.dino || !imgsLoaded.cactus) { alert("PNG ще не завантажені!"); return; }
+
+        cleanupGameLoop();
+        obstacles = [];
+        dino.y = groundY;
+        dino.vy = 0;
+        startTime = Date.now();
+        gameRunning = true;
+        cactusCount = 0;
+        score = 0;
+
+        startBtn.disabled = true;
+        jumpBtn.disabled = false;
+        retryBtn.style.display = "none";
+        imgStatus.textContent = "Гра запущена";
+
+        window.addEventListener("keydown", keyHandler);
+        spawnIntervalId = setInterval(spawnCactus,675);
+        rafId = requestAnimationFrame(loop);
+    }
+
+    function finishGame() {
+        cleanupGameLoop();
+        gameRunning = false;
+        jumpBtn.disabled = true;
+        retryBtn.style.display = "inline-block";
+        startBtn.disabled = true;
+        imgStatus.textContent = "Game Over";
+
+        const finalScore = Math.floor((Date.now() - startTime) / 1000);
+        if(finalScore > 0) addBalance(finalScore);
+
+        ctx.fillStyle = "rgba(0,0,0,0.5)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#fff";
+        ctx.font = "22px Arial";
+        ctx.fillText("💀 GAME OVER", 230, 70);
+        ctx.font = "16px Arial";
+        ctx.fillText("Очки: " + finalScore, 260, 96);
+
+        window.removeEventListener("keydown", keyHandler);
+
+        if(finalScore > 0) giveArcadeRewards(finalScore);
+        saveData();
+    }
+
+    function retryGame() {
+        obstacles = [];
+        dino.y = groundY;
+        dino.vy = 0;
+        startGame();
+    }
+
+    function backToArcade() {
+        cleanupGameLoop();
+        window.removeEventListener("keydown", keyHandler);
+        dinoImg.onload = null;
+        cactusImg.onload = null;
+        if (typeof arcadeMenu === "function") arcadeMenu();
+        else document.getElementById("app").innerHTML = "";
+    }
+
+    startBtn.addEventListener("click", startGame);
+    reloadBtn.addEventListener("click", setImgSrcs);
+    jumpBtn.addEventListener("pointerdown", (e) => { e.preventDefault(); jumpDino(); });
+    retryBtn.addEventListener("click", retryGame);
+    backBtn.addEventListener("click", backToArcade);
+
+    setImgSrcs();
+    drawPreStart();
 }
 
 function openEventsMenu() {
