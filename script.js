@@ -678,7 +678,7 @@ function startSaper() {
     renderBoard();
 }
 
-function startDinoPaid() {
+function startDinoPaid(){
     if (typeof balance === "undefined") balance = 0;
     if (balance < 35) {
         alert("Недостатньо нікусів для гри в Динозаврик!");
@@ -727,7 +727,7 @@ function startDino() {
     const groundY = 120;
 
     let obstacles = [];
-    let obstacleSpeed =5; 
+    let obstacleSpeed = 5; 
     let cactusCount = 0;
 
     let gameRunning = false;
@@ -736,7 +736,7 @@ function startDino() {
     let startTime = 0;
     let score = 0;
 
-    function rectsOverlap(a, b) {
+    function rectsOverlap(a, b){
         return !(a.x + a.w < b.x || a.x > b.x + b.w || a.y + a.h < b.y || a.y > b.y + b.h);
     }
 
@@ -763,7 +763,7 @@ function startDino() {
         cactusImg.src = "img/cactus.png?ts=" + imgLoadToken;
     }
 
-    function updateImgStatus() {
+    function updateImgStatus(){
         if (imgsLoaded.dino && imgsLoaded.cactus) {
             imgStatus.textContent = "PNG завантажені ✅";
             startBtn.disabled = false;
@@ -773,8 +773,8 @@ function startDino() {
         }
     }
 
-    function drawPreStart() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function drawPreStart(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
         ctx.fillStyle = "#f4e1b0";
         ctx.fillRect(0, groundY + dino.h, canvas.width, canvas.height - (groundY + dino.h));
         if (imgsLoaded.dino) ctx.drawImage(dinoImg, dino.x, dino.y, dino.w, dino.h);
@@ -784,9 +784,10 @@ function startDino() {
         ctx.fillText("Натисни ▶ Старт", 260, 30);
     }
 
-    function spawnCactus() {
+    function spawnCactus(){
         cactusCount++;
         let count = 1;
+
         if(score < 35){
             if(cactusCount <= 10) count = 1;
             else if(cactusCount <= 30) count = Math.random() < 0.5 ? 2 : 1;
@@ -796,18 +797,21 @@ function startDino() {
             else if(Math.random() < 0.8) count = 2;
             else count = 1;
         }
+
         for (let i = 0; i < count; i++) {
-            let xOffset = i * 25 + (cactusCount === 1 ? 200 : 0);
+            let xOffset = i*25 + (cactusCount === 1 ? 200 : 0);
             obstacles.push({ x: canvas.width + xOffset, y: groundY, w: 20, h: 30 });
         }
     }
 
-    function jumpDino() {
+    function jumpDino(){
         if (!gameRunning) return;
-        if (dino.y >= groundY - 0.1) dino.vy = jumpVelocity;
+        if (dino.y >= groundY - 0.1) {
+            dino.vy = jumpVelocity;
+        }
     }
 
-    function keyHandler(e) {
+    function keyHandler(e){
         if (e.code === "Space") {
             e.preventDefault();
             jumpDino();
@@ -819,24 +823,23 @@ function startDino() {
         dino.y += dino.vy;
         if (dino.y > groundY) { dino.y = groundY; dino.vy = 0; }
 
-        for (let o of obstacles) o.x -= obstacleSpeed;
+        for (let o of obstacles) { o.x -= obstacleSpeed; }
         obstacles = obstacles.filter(o => o.x + o.w > 0);
 
         const dinoRect = { x: dino.x, y: dino.y, w: dino.w, h: dino.h };
         for (let o of obstacles) {
-            if (rectsOverlap(dinoRect, o)) { finishGame(); return; }
+            const oRect = { x: o.x, y: o.y, w: o.w, h: o.h };
+            if (rectsOverlap(dinoRect, oRect)) { finishGame(); return; }
         }
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0,0,canvas.width,canvas.height);
         ctx.fillStyle = "#f4e1b0";
         ctx.fillRect(0, groundY + dino.h, canvas.width, canvas.height - (groundY + dino.h));
-
         if (imgsLoaded.dino) ctx.drawImage(dinoImg, dino.x, dino.y, dino.w, dino.h);
-        else { ctx.fillStyle = "#333"; ctx.fillRect(dino.x, dino.y, dino.w, dino.h); }
-
+        else { ctx.fillStyle="#333"; ctx.fillRect(dino.x, dino.y, dino.w, dino.h); }
         for (let o of obstacles) {
             if (imgsLoaded.cactus) ctx.drawImage(cactusImg, o.x, o.y, o.w, o.h);
-            else { ctx.fillStyle = "#070"; ctx.fillRect(o.x, o.y, o.w, o.h); }
+            else { ctx.fillStyle="#070"; ctx.fillRect(o.x, o.y, o.w, o.h); }
         }
 
         score = Math.floor((Date.now() - startTime) / 1000);
@@ -847,9 +850,11 @@ function startDino() {
         rafId = requestAnimationFrame(loop);
     }
 
-    function startGame() {
-        if (!imgsLoaded.dino || !imgsLoaded.cactus) { alert("PNG ще не завантажені!"); return; }
-
+    function startGame(){
+        if (!imgsLoaded.dino || !imgsLoaded.cactus) {
+            alert("PNG ще не завантажені!");
+            return;
+        }
         cleanupGameLoop();
         obstacles = [];
         dino.y = groundY;
@@ -865,11 +870,12 @@ function startDino() {
         imgStatus.textContent = "Гра запущена";
 
         window.addEventListener("keydown", keyHandler);
-        spawnIntervalId = setInterval(spawnCactus,675);
+        spawnIntervalId = setInterval(spawnCactus,775);
+        spawnCactus();
         rafId = requestAnimationFrame(loop);
     }
 
-    function finishGame() {
+    function finishGame(){
         cleanupGameLoop();
         gameRunning = false;
         jumpBtn.disabled = true;
@@ -890,18 +896,20 @@ function startDino() {
 
         window.removeEventListener("keydown", keyHandler);
 
-        if(finalScore > 0) giveArcadeRewards(finalScore);
+        if(finalScore > 0){
+            giveArcadeRewards(finalScore);
+        }
         saveData();
     }
 
-    function retryGame() {
+    function retryGame(){
         obstacles = [];
         dino.y = groundY;
         dino.vy = 0;
         startGame();
     }
 
-    function backToArcade() {
+    function backToArcade(){
         cleanupGameLoop();
         window.removeEventListener("keydown", keyHandler);
         dinoImg.onload = null;
@@ -910,9 +918,12 @@ function startDino() {
         else document.getElementById("app").innerHTML = "";
     }
 
+    // Подвійна обробка кнопки, щоб точно спрацьовувало на всіх браузерах
+    jumpBtn.addEventListener("pointerdown", jumpDino);
+    jumpBtn.addEventListener("click", jumpDino);
+
     startBtn.addEventListener("click", startGame);
     reloadBtn.addEventListener("click", setImgSrcs);
-    jumpBtn.addEventListener("pointerdown", (e) => { e.preventDefault(); jumpDino(); });
     retryBtn.addEventListener("click", retryGame);
     backBtn.addEventListener("click", backToArcade);
 
