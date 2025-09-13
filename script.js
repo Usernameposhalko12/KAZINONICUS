@@ -870,7 +870,7 @@ function startDino() {
         imgStatus.textContent = "Гра запущена";
 
         window.addEventListener("keydown", keyHandler);
-        spawnIntervalId = setInterval(spawnCactus,750);
+        spawnIntervalId = setInterval(spawnCactus,725);
         spawnCactus();
         rafId = requestAnimationFrame(loop);
     }
