@@ -1364,7 +1364,55 @@ function accountMenu() {
         <h2>Акаунт ⚙️</h2>
         <input type="password" id="deletePass" placeholder="Введіть пароль" oninput="checkDeletePass()"/><br/><br/>
         <button id="deleteBtn" onclick="deleteProgress()" disabled>Видалити прогрес</button><br/><br/>
+        <button onclick="showUserRights()">ℹ️ Користувацьке право</button><br/><br/>
         <button onclick="mainMenu()">⬅ Назад</button>
+        
+        <!-- Модальне вікно для правил -->
+        <div id="rightsModal" style="
+            display:none;
+            position:fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.7);
+            justify-content:center;
+            align-items:center;
+            z-index:1000;
+        ">
+            <div style="
+                background:#fff;
+                color:#000;
+                width:80%;
+                max-width:600px;
+                max-height:80%;
+                overflow-y:auto;
+                padding:20px;
+                border-radius:10px;
+                position:relative;
+            ">
+                <h2>Користувацьке право Нікус Кейс Ультра</h2>
+                <p>
+                1. Нікуси не мають грошової цінності та не можуть бути повернені.<br>
+                2. Придбані нікуси не підлягають поверненню.<br>
+                3. Забороняється чітити, взламувати код та красти інформацію.<br>
+                4. Не можна напряму купувати донат за реальні гроші всередині гри.<br>
+                5. Автор не несе відповідальності за втрату нікусів або внутрішньоігрових предметів.<br>
+                6. Донат є виключно добровільним.<br>
+                7. Використання гри означає погодження з цими правилами.<br>
+                8. Нікус Кейс Ультра є частиною внутрішньої економіки та ПВО, і не є азартною грою або казино.<br>
+                9. Гра заснована на популярних ігрових механіках (кейси, батл-паси) і не порушує правил школи.<br>
+                10. Система висміює будь-яку форму азартних ігор і не пропагує її.
+                </p>
+                <button onclick="closeUserRights()" style="
+                    position:absolute;
+                    top:10px; right:10px;
+                    background:red;
+                    color:white;
+                    border:none;
+                    padding:5px 10px;
+                    border-radius:5px;
+                    cursor:pointer;
+                ">✖ Закрити</button>
+            </div>
+        </div>
     `;
 }
 
@@ -1384,6 +1432,16 @@ function deleteProgress() {
         alert("Прогрес видалено! Сторінка буде перезавантажена.");
         location.reload();
     }
+}
+
+// Показати модальне вікно
+function showUserRights() {
+    document.getElementById("rightsModal").style.display = "flex";
+}
+
+// Закрити модальне вікно
+function closeUserRights() {
+    document.getElementById("rightsModal").style.display = "none";
 }
 
 const promoCodesBase64 = {
