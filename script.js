@@ -968,12 +968,17 @@ function startDino() {
         saveData();
     }
 
-    function retryGame(){
-        obstacles = [];
-        dino.y = groundY;
-        dino.vy = 0;
-        startGame();
+   function retryGame(){
+    if (balance < 50) {
+        alert("Недостатньо нікусів для повторної гри!");
+        return;
     }
+    addBalance(-50);
+    obstacles = [];
+    dino.y = groundY;
+    dino.vy = 0;
+    startGame();
+}
 
     function backToArcade(){
         cleanupGameLoop();
