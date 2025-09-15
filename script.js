@@ -256,7 +256,10 @@ function getCaseName(type){
   if(type === "autumnus") return "Autumnus25";
   if(type === "harvest") return "Harvest25"; 
   if(type === "arcase") return "ArcadeCase";
-  return "Невідомий кейс";
+  if(type === "halloween") return "Halloween25";
+  if(type === "halloween_elite") return "Halloween25 Elite";
+  if(type === "box_halloween") return "BoxHalloween25"; 
+return "Невідомий кейс";
 }
 
  function openCase(idx){
@@ -273,6 +276,10 @@ function getCaseName(type){
   else if(item.caseType === "autumnus") drop = dropAutumnus25Case();
   else if(item.caseType === "harvest") drop = dropHarvest25Case();
   else if(item.caseType === "arcase") drop = dropArcadeCase();
+  else if(item.caseType === "halloween") drop = dropHalloween25Case();
+  else if(item.caseType === "halloween_elite") drop = dropHalloween25EliteCase();
+  else if(item.caseType === "box_halloween") drop = dropBoxHalloween25Case();
+
 
   // Якщо кейс аркадний — перевіряємо наявність ключа
   if(item.caseType === "arcase"){
@@ -328,6 +335,65 @@ function dropArcadeCase(){
     {name:"Картофель", img:"kartofel.png", rarity:"Виняткова", chance:0.15},
     {name:"Щотинакоїв", img:"shotinakoiv.png", rarity:"Звичайна", chance:0.245},
     {name:"Услезах", img:"uslezah.png", rarity:"Звичайна", chance:0.245}
+  ];
+
+  let r = Math.random(), sum = 0;
+  for(const p of pool){
+    sum += p.chance;
+    if(r < sum) return createItem(p);
+  }
+  return createItem(pool[pool.length-1]);
+}
+
+// Halloween25
+function dropHalloween25Case(){
+  const pool = [
+    {name:"Пепе", img:"pepe.png", rarity:"Секретна", chance:0.01},
+    {name:"Крутий", img:"krutyi.png", rarity:"Секретна", chance:0.01},
+    {name:"Санс", img:"sans.png", rarity:"Епічна", chance:0.07},
+    {name:"РозумнаЛюдина", img:"rozumna.png", rarity:"Епічна", chance:0.07},
+    {name:"ДикийОгірок", img:"cucumber.png", rarity:"Виняткова", chance:0.175},
+    {name:"МастурБіст", img:"masturbist.png", rarity:"Виняткова", chance:0.175},
+    {name:"Ждун", img:"zhdun.png", rarity:"Звичайна", chance:0.25},
+    {name:"Троль", img:"troll.png", rarity:"Звичайна", chance:0.25}
+  ];
+
+  let r = Math.random(), sum = 0;
+  for(const p of pool){
+    sum += p.chance;
+    if(r < sum) return createItem(p);
+  }
+  return createItem(pool[pool.length-1]);
+}
+
+// Halloween25 Elite
+function dropHalloween25EliteCase(){
+  const pool = [
+    {name:"Пепе", img:"pepe.png", rarity:"Секретна", chance:0.015},
+    {name:"Крутий", img:"krutyi.png", rarity:"Секретна", chance:0.015},
+    {name:"Санс", img:"sans.png", rarity:"Епічна", chance:0.185},
+    {name:"РозумнаЛюдина", img:"rozumna.png", rarity:"Епічна", chance:0.185},
+    {name:"ДикийОгірок", img:"cucumber.png", rarity:"Виняткова", chance:0.3},
+    {name:"МастурБіст", img:"masturbist.png", rarity:"Виняткова", chance:0.3}
+  ];
+
+  let r = Math.random(), sum = 0;
+  for(const p of pool){
+    sum += p.chance;
+    if(r < sum) return createItem(p);
+  }
+  return createItem(pool[pool.length-1]);
+}
+
+// BoxHalloween25
+function dropBoxHalloween25Case(){
+  const pool = [
+    {name:"Санс", img:"sans.png", rarity:"Епічна", chance:0.05},
+    {name:"РозумнаЛюдина", img:"rozumna.png", rarity:"Епічна", chance:0.05},
+    {name:"ДикийОгірок", img:"cucumber.png", rarity:"Виняткова", chance:0.15},
+    {name:"МастурБіст", img:"masturbist.png", rarity:"Виняткова", chance:0.15},
+    {name:"Ждун", img:"zhdun.png", rarity:"Звичайна", chance:0.3},
+    {name:"Троль", img:"troll.png", rarity:"Звичайна", chance:0.3}
   ];
 
   let r = Math.random(), sum = 0;
@@ -1481,6 +1547,28 @@ const promoCodesBase64 = {
 "SEFSVkVTVE5BVFVSQUw=": {type:"unlimited", reward:()=>{addCase("harvest"); alert("Отримано кейс Harvest25!");}},
   "QUlSQ0FTRUNBU0U=": {type:"once", reward:()=>{addCase("arcase"); alert("Отримано Аркад кейс!");}},
   "QUJPQkE=": {type:"once", reward:()=>{addCase("arcase"); alert("Отримано Аркад кейс!");}},
+
+"VEVTVEJPWE9LQUs=": { 
+    type: "unlimited",
+    reward: () => {
+        addCase("box_halloween");
+        alert("Отримано Бокс Halloween25!");
+    }
+},
+"SEFMTE9XRUVOQVJCSVRB": { 
+    type: "unlimited",
+    reward: () => {
+        addCase("halloween");
+        alert("Отримано кейс Halloween25!");
+    }
+},
+"RUVFRU9LQUs=": {  
+    type: "unlimited",
+    reward: () => {
+        addCase("halloween_elite");
+        alert("Отримано кейс Halloween25 Elite!");
+    }
+},
 
 "UEVSTU9LRVk=": {type:"once", reward:()=>{
     inventory.push(createKeyForCase("arcase", "ключ Аркад", "img/key_arcase.png"));
