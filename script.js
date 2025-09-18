@@ -262,24 +262,122 @@ function getCaseName(type){
 return "Невідомий кейс";
 }
 
- function openCase(idx){
+
+const ANIM = {
+  itemsCount: 41,
+  itemWidth: 120,      // ширина одного елементу (px)
+  itemGap: 10,         // сумарний відступ між елементами (px)
+  duration: 4800,      // тривалість анімації (ms)
+  containerWidth: 600
+};
+
+function openCase(idx){
   if(!inventory[idx]) return;
   const item = inventory[idx];
   if(item.type !== "case") return;
 
-  // Згенеруємо дроп за типом кейсу (робиться один раз)
-  let drop = null;
-  if(item.caseType === "autumn") drop = dropAutumnCase();
-  else if(item.caseType === "box") drop = dropBoxCase();
-  else if(item.caseType === "gift") drop = dropGiftCase();
-  else if(item.caseType === "fallalt") drop = dropFallAlternative25Case();
-  else if(item.caseType === "autumnus") drop = dropAutumnus25Case();
-  else if(item.caseType === "harvest") drop = dropHarvest25Case();
-  else if(item.caseType === "arcase") drop = dropArcadeCase();
-  else if(item.caseType === "halloween") drop = dropHalloween25Case();
-  else if(item.caseType === "halloween_elite") drop = dropHalloween25EliteCase();
-  else if(item.caseType === "box_halloween") drop = dropBoxHalloween25Case();
+  let dropFunc = null;
+  switch(item.caseType){
+    case "autumn": dropFunc = dropAutumnCase; break;
+    case "box": dropFunc = dropBoxCase; break;
+    case "gift": dropFunc = dropGiftCase; break;
+    case "fallalt": dropFunc = dropFallAlternative25Case; break;
+    case "autumnus": dropFunc = dropAutumnus25Case; break;
+    case "harvest": dropFunc = dropHarvest25Case; break;
+    case "arcase": dropFunc = dropArcadeCase; break;
+    case "halloween": dropFunc = dropHalloween25Case; break;
+    case "halloween_elite": dropFunc = dropHalloween25EliteCase; break;
+    case "box_halloween": dropFunc = dropBoxHalloween25Case; break;
+    default: alert("Невідомий тип кейсу"); return;
+  }
 
+  // Якщо аркадний кейс — перевіряємо ключ
+  if(item.caseType === "arcase"){
+    const keyIdx = inventory.findIndex(i => i.type === "key" && i.keyType === "arcase");
+    if(keyIdx === -1){
+      alert("Потрібен ключ для відкриття цього кейсу!");
+      return;
+    }
+    // Видаляємо спочатку більший індекс
+    if(keyIdx > idx){
+      inventory.splice(keyIdx, 1);
+      inventory.splice(idx, 1);
+    } else if(keyIdx < idx){
+      inventory.splice(idx, 1);
+      inventory.splice(keyIdx, 1);
+    } else {
+      inventory.splice(idx, 1);
+    }
+  } else {
+    // Звичайний кейс — видаляємо тільки кейс
+    inventory.splice(idx, 1);
+  }
+
+  saveData();
+
+  const finalDrop = dropFunc();
+  animateCaseOpening(finalDrop, dropFunc, item.caseType);
+}
+
+function animateCaseOpening(finalDrop, dropFunc, caseType){
+  const cfg = ANIM;
+  const app = document.getElementById("app");
+  app.innerHTML = `
+    <h2 style="font-weight:bold;">Відкриття ${getCaseName(caseType)}...</h2>
+    <div id="roulette" style="overflow:hidden; width:${cfg.containerWidth}px; margin:20px auto; position:relative; background:#111; padding:12px; box-sizing:border-box; border:4px solid gold; border-radius:8px;">
+      <div id="roulette-strip" style="display:flex; align-items:center; will-change:transform;"></div>
+      <div style="position:absolute; top:0; bottom:0; left:50%; width:4px; background:rgba(255,0,0,0.9); transform:translateX(-50%);"></div>
+    </div>
+  `;
+
+  const strip = document.getElementById("roulette-strip");
+  const count = cfg.itemsCount;
+  const centerIndex = Math.floor(count / 2);
+
+  const pool = [];
+  for(let i = 0; i < count; i++){
+    pool.push(dropFunc());
+  }
+  pool[centerIndex] = finalDrop;
+
+  pool.forEach(p => {
+    const el = document.createElement("div");
+    el.style.width = cfg.itemWidth + "px";
+    el.style.flex = `0 0 ${cfg.itemWidth}px`;
+    el.style.margin = `0 ${cfg.itemGap/2}px`;
+    el.style.textAlign = "center";
+    
+    // Кольори за рідкістю
+    let color;
+    switch(p.rarity){
+      case "Секретна": color = "red"; break;
+      case "Епічна": color = "purple"; break;
+      case "Виняткова": color = "deepskyblue"; break;
+      default: color = "green"; // Звичайна
+    }
+
+    el.innerHTML = `<img src="img/${p.img}" width="${cfg.itemWidth-20}"><div style="font-weight:bold; color:${color}; margin-top:6px;">${p.name}</div>`;
+    strip.appendChild(el);
+  });
+
+  strip.style.transform = `translateX(0px)`;
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const step = cfg.itemWidth + cfg.itemGap;
+      const targetX = -(centerIndex * step - (cfg.containerWidth/2 - cfg.itemWidth/2));
+      strip.style.transition = `transform ${cfg.duration}ms ease-out`;
+      strip.style.transform = `translateX(${targetX}px)`;
+    });
+  });
+
+  strip.addEventListener('transitionend', function handler(){
+    strip.removeEventListener('transitionend', handler);
+    inventory.push(finalDrop);
+    saveData();
+    alert(`Ви отримали: ${finalDrop.name}`);
+    showInventory();
+  });
 
   // Якщо кейс аркадний — перевіряємо наявність ключа
   if(item.caseType === "arcase"){
