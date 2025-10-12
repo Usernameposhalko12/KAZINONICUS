@@ -1,6 +1,6 @@
 body {
-  background: #1a1200;
-  color: #ffd93b;
+  background: #1a0f00;
+  color: #ffb84d;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
@@ -10,8 +10,12 @@ body {
 #logo-container {
   text-align: center;
   padding: 15px 0;
-  background: linear-gradient(90deg, #e6c200, #ffdd55);
-  box-shadow: 0 4px 8px rgba(255, 221, 85, 0.5);
+  background: linear-gradient(90deg, #ff8c00, #ffa733);
+  box-shadow: 0 4px 8px rgba(255, 140, 0, 0.5);
+}
+
+.yellow-line {
+  display: none;
 }
 
 #logo {
@@ -23,34 +27,35 @@ body {
   max-width: 900px;
   margin: 20px auto;
   padding: 10px;
-  background: #331f00;
+  background: #331a00;
   border-radius: 10px;
-  box-shadow: 0 0 15px #ffda00aa;
+  box-shadow: 0 0 20px #ff9f1a88;
 }
 
 h2 {
   text-align: center;
   margin-bottom: 15px;
-  color: #ffe066;
-  text-shadow: 0 0 5px #ffd93b;
+  color: #ffb84d;
+  text-shadow: 0 0 6px #ff8c00, 0 0 12px #ff4d00;
 }
 
 button {
-  background: linear-gradient(45deg, #ffd93b, #e6c200);
+  background: linear-gradient(45deg, #ffb84d, #ff8c00);
   border: none;
   padding: 10px 20px;
   margin: 5px 0;
   border-radius: 5px;
   cursor: pointer;
-  color: #4a3b00;
+  color: #3a1f00;
   font-weight: bold;
-  box-shadow: 0 4px 6px #b38f00;
-  transition: background 0.3s ease;
+  box-shadow: 0 4px 6px #b35a00;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-  background: linear-gradient(45deg, #ffe066, #ffdd55);
-  color: #442d00;
+  background: linear-gradient(45deg, #ffc966, #ff9900);
+  color: #3a1f00;
+  transform: scale(1.05);
 }
 
 input {
@@ -58,37 +63,43 @@ input {
   padding: 10px;
   margin: 7px 0 15px 0;
   border-radius: 5px;
-  border: 2px solid #ffd93b;
-  background: #fff6b3;
+  border: 2px solid #ffb84d;
+  background: #fff1b3;
   font-weight: bold;
-  color: #4a3b00;
+  color: #3a1f00;
   box-sizing: border-box;
 }
 
 input:focus {
   outline: none;
-  border-color: #e6c200;
-  box-shadow: 0 0 8px #ffd93b;
+  border-color: #ff8c00;
+  box-shadow: 0 0 10px #ffb84d;
 }
 
 .inventory-item {
   margin: 10px;
   padding: 10px;
-  border: 1px solid #ffda00;
+  border: 1px solid #ff9f1a;
   border-radius: 6px;
-  background: #442f00;
-  color: #ffe066;
+  background: #442600;
+  color: #ffcc66;
   text-align: center;
   display: inline-block;
   width: 140px;
   vertical-align: top;
   cursor: pointer;
   position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inventory-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 15px #ffb84d;
 }
 
 .inventory-item.selected {
-  border-color: #ffb800;
-  box-shadow: 0 0 12px #ffd93b;
+  border-color: #ff6f00;
+  box-shadow: 0 0 15px #ffb84d;
 }
 
 .inventory-item img {
@@ -103,18 +114,17 @@ input:focus {
   bottom: 5px;
   left: 50%;
   transform: translateX(-50%);
-  background: #cc6600;
+  background: #cc3300;
   color: #fff;
   font-weight: normal;
   padding: 4px 10px;
   font-size: 12px;
   border-radius: 4px;
-  box-shadow: none;
 }
 
 .inventory-item button.delete-btn:hover {
-  background: #ff9900;
-  color: #442d00;
+  background: #ff4500;
+  color: #220900;
 }
 
 .inventory-container {
@@ -136,29 +146,38 @@ input:focus {
   width: 150px;
   user-select: none;
   border-radius: 8px;
-  box-shadow: 0 0 10px #ffda00aa;
+  box-shadow: 0 0 15px #ff8c0088;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.case-container img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px #ffb84d99;
 }
 
 .case-price {
   font-weight: bold;
-  color: #ffda00;
+  color: #ffb84d;
   margin-top: 5px;
+  text-shadow: 0 0 5px #ff9900;
 }
 
 .promo-info {
   font-size: 14px;
   margin-top: 5px;
-  color: #ffda00cc;
+  color: #ff9900cc;
+  text-shadow: 0 0 4px #ff6600;
 }
 
 .alert {
-  background: #4a3b00;
-  border: 1px solid #ffd93b;
+  background: #3a1f00;
+  border: 1px solid #ffb84d;
   padding: 8px;
   border-radius: 5px;
   margin: 10px auto;
   max-width: 400px;
   text-align: center;
-  color: #ffdd55;
+  color: #ffcc66;
   font-weight: bold;
+  text-shadow: 0 0 4px #ff9900;
 }
