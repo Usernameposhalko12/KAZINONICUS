@@ -1446,9 +1446,9 @@ const tasks = [
   {id:53, description:"Отримати предмет преміум", reward:()=>addBPS(1500), check:()=> inventory.some(i=>i.premium===true), completed:false},
   {id:54, description:"Накопичити 200 нікусів", reward:()=>addBPS(1500), check:()=> balance>=200, completed:false},
   {id:55, description:"Накопичити 100 нікусів", reward:()=>addBPS(1000), check:()=> balance>=100, completed:false},
-  {id:56, description:"Отримати будь-який звичайний предмет з Halloween25", reward:()=>addBPS(1000), check:()=> inventory.some(i=>i.sourceCase==="Halloween25" && i.rarity==="Звичайна"), completed:false},
-  {id:57, description:"Отримати будь-який винятковий предмет з Halloween25", reward:()=>addBPS(1500), check:()=> inventory.some(i=>i.sourceCase==="Halloween25" && i.rarity==="Виняткова"), completed:false},
-  {id:58, description:"Отримати будь-який епічний предмет з Halloween25", reward:()=>addBPS(2500), check:()=> inventory.some(i=>i.sourceCase==="Halloween25" && i.rarity==="Епічна"), completed:false},
+{id:56, description:"Отримати Ждун або Троль", reward:()=>addBPS(1000), check:()=>inventory.some(i=>["Ждун","Троль"].includes(i.name)), completed:false},
+{id:57, description:"Отримати ДикийОгірок або МастурБіст", reward:()=>addBPS(1500), check:()=>inventory.some(i=>["ДикийОгірок","МастурБіст"].includes(i.name)), completed:false},
+{id:58, description:"Отримати Санс або РозумнаЛюдина", reward:()=>addBPS(2500), check:()=>inventory.some(i=>["Санс","РозумнаЛюдина"].includes(i.name)), completed:false},
   {id:68, description:"*Випити Живчик* Отримати Живчик", reward:()=>addBPS(2000), check:()=> inventory.some(i=>["Живчик"].includes(i.name)), completed:false},
 {id:69,description:"*Списати з ГДЗ*, Отримати предмет ГДЗ з якістю преміум",reward:()=>addBPS(3000),check:()=>inventory.some(i=>i.premium&&i.name.includes("ГДЗ")),completed:false}
 
