@@ -643,7 +643,7 @@ const itemsPool = {
 
 function dropAutumnCase(){
 
-  const rates = {secret:0.01, epic:0.14, exceptional:0.30, common:0.55};
+ const rates = {secret:0.04, epic:0.14, exceptional:0.27, common:0.55};
   let rarity = dropByRates(rates);
   if(rarity === "secret"){
     return createItem(itemsPool.secret[0]);
