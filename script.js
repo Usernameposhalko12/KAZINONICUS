@@ -1788,7 +1788,6 @@ const blackMarket = {
   gift: { name: "Подарунковий кейс", price: 60, caseType: "gift" },
   arcase: { name: "Аркадний кейс", price:15, caseType: "arcase" },
   arcaseKey: { name: "Ключ від Аркадного кейсу", price:50, caseType: "arcase", isKey: true },
-  box_halloween: { name: "Бокс Halloween25", price:55, caseType: "box_halloween" },
   kolek1: { name: "Осінній Колекціоний Кейс", price:100, caseType: "kolek1" }
 };
 
