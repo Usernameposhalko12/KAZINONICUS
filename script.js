@@ -1623,7 +1623,7 @@ const promoCodesBase64 = {
   "UkVBTElUWUdJRlQx": {type:"unlimited", reward:()=>{addCase("gift"); alert("Отримано подарунковий кейс!");}},
   "TklMSU1JVEFVVDI1": {type:"unlimited", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},
   "WVNFTExBVVRVU1QyNQ==": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},
-  "RE9ESUsyNTBPS0FL": {type:"unlimited", reward:()=>{addBalance(250); alert("Отримано 250 нікусів!");}},
+  "RE9ESUsxMjNTT0JBS0E=": {type:"unlimited", reward:()=>{addBalance(250); alert("Отримано 250 нікусів!");}},
   "RkFMTE5BVDE0":{type:"unlimited",reward:()=>{addCase("fallalt");alert("Отримано кейс FallAlternative25!");}},
   "QVVUSFVNMTIzMTQ4OA==":{type:"unlimited",reward:()=>{addCase("autumnus");alert("Отримано кейс Autumnus25!");}},
 
