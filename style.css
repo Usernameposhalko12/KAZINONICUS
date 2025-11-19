@@ -1,88 +1,103 @@
+/* ❄️ Загальний зимовий стиль */
+
 body {
-  background: #1a0f00;
-  color: #ffb84d;
+  background: radial-gradient(circle at 50% -40%, #2a78b8 0%, #001831 80%);
+  background-repeat: no-repeat;
+  background-size: 120% 150vh;
+
+  color: #ccefff;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
   user-select: none;
+  overflow-x: hidden;
 }
 
+/* 🧊 Верхня панель із логотипом */
 #logo-container {
   text-align: center;
   padding: 15px 0;
-  background: linear-gradient(90deg, #ff8c00, #ffa733);
-  box-shadow: 0 4px 8px rgba(255, 140, 0, 0.5);
-}
-
-.yellow-line {
-  display: none;
+  background: linear-gradient(90deg, #4da6ff, #80cfff, #4da6ff);
+  box-shadow: 0 4px 15px rgba(140, 200, 255, 0.6);
+  border-bottom: 2px solid rgba(180, 230, 255, 0.3);
 }
 
 #logo {
   max-width: 250px;
   height: auto;
+  filter: drop-shadow(0 0 8px #99e6ff);
 }
 
+/* 🧊 Основна панель */
 #app {
   max-width: 900px;
-  margin: 20px auto;
-  padding: 10px;
-  background: #331a00;
-  border-radius: 10px;
-  box-shadow: 0 0 20px #ff9f1a88;
+  margin: 25px auto;
+  padding: 15px;
+  background: rgba(190, 220, 255, 0.55);
+  border-radius: 12px;
+  border: 1px solid rgba(120, 190, 255, 0.4);
+  box-shadow: 0 0 20px rgba(120, 200, 255, 0.3);
+  backdrop-filter: blur(8px);
+  color: #001831;
 }
 
+/* ❄️ Заголовки */
 h2 {
   text-align: center;
   margin-bottom: 15px;
-  color: #ffb84d;
-  text-shadow: 0 0 6px #ff8c00, 0 0 12px #ff4d00;
+  color: #002b4d;
+  text-shadow: 0 0 10px #80cfff, 0 0 20px #4da6ff;
 }
 
+/* 🎁 Кнопки */
 button {
-  background: linear-gradient(45deg, #ffb84d, #ff8c00);
+  background: linear-gradient(45deg, #99ddff, #4da6ff);
   border: none;
-  padding: 10px 20px;
+  padding: 10px 22px;
   margin: 5px 0;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  color: #3a1f00;
+  color: #001831;
   font-weight: bold;
-  box-shadow: 0 4px 6px #b35a00;
-  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 60, 100, 0.4);
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 button:hover {
-  background: linear-gradient(45deg, #ffc966, #ff9900);
-  color: #3a1f00;
+  background: linear-gradient(45deg, #b3f0ff, #66c2ff);
+  color: #001133;
   transform: scale(1.05);
+  box-shadow: 0 0 15px #80cfff;
 }
 
+/* ✨ Поля вводу */
 input {
   width: 100%;
   padding: 10px;
   margin: 7px 0 15px 0;
-  border-radius: 5px;
-  border: 2px solid #ffb84d;
-  background: #fff1b3;
+  border-radius: 6px;
+  border: 2px solid #80cfff;
+  background: #e0f5ff;
   font-weight: bold;
-  color: #3a1f00;
+  color: #001831;
   box-sizing: border-box;
+  transition: 0.2s ease;
 }
 
 input:focus {
   outline: none;
-  border-color: #ff8c00;
-  box-shadow: 0 0 10px #ffb84d;
+  border-color: #4da6ff;
+  box-shadow: 0 0 10px #99e6ff;
 }
 
+/* 🧊 Елементи інвентарю */
 .inventory-item {
   margin: 10px;
   padding: 10px;
-  border: 1px solid #ff9f1a;
-  border-radius: 6px;
-  background: #442600;
-  color: #ffcc66;
+  border: 1px solid #80cfff;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ccefff 0%, #99ddff 100%);
+  color: #001831;
   text-align: center;
   display: inline-block;
   width: 140px;
@@ -94,12 +109,12 @@ input:focus {
 
 .inventory-item:hover {
   transform: translateY(-3px);
-  box-shadow: 0 0 15px #ffb84d;
+  box-shadow: 0 0 15px #80cfff;
 }
 
 .inventory-item.selected {
-  border-color: #ff6f00;
-  box-shadow: 0 0 15px #ffb84d;
+  border-color: #33ccff;
+  box-shadow: 0 0 20px #66c2ff;
 }
 
 .inventory-item img {
@@ -107,15 +122,17 @@ input:focus {
   height: auto;
   margin-bottom: 8px;
   user-select: none;
+  filter: drop-shadow(0 0 6px #66c2ff);
 }
 
+/* 🚮 Кнопка видалення */
 .inventory-item button.delete-btn {
   position: absolute;
   bottom: 5px;
   left: 50%;
   transform: translateX(-50%);
-  background: #cc3300;
-  color: #fff;
+  background: #66c2ff;
+  color: #001831;
   font-weight: normal;
   padding: 4px 10px;
   font-size: 12px;
@@ -123,61 +140,63 @@ input:focus {
 }
 
 .inventory-item button.delete-btn:hover {
-  background: #ff4500;
-  color: #220900;
+  background: #99ddff;
 }
 
-.inventory-container {
-  text-align: center;
-}
-
-.flex-center {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.case-container {
-  margin: 10px;
-  text-align: center;
-}
-
+/* 🎁 Кейси */
 .case-container img {
   width: 150px;
   user-select: none;
   border-radius: 8px;
-  box-shadow: 0 0 15px #ff8c0088;
+  box-shadow: 0 0 15px rgba(120, 200, 255, 0.4);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .case-container img:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 25px #ffb84d99;
+  box-shadow: 0 0 25px #66c2ff;
 }
 
 .case-price {
   font-weight: bold;
-  color: #ffb84d;
+  color: #002b4d;
   margin-top: 5px;
-  text-shadow: 0 0 5px #ff9900;
+  text-shadow: 0 0 4px #66c2ff;
 }
 
-.promo-info {
-  font-size: 14px;
-  margin-top: 5px;
-  color: #ff9900cc;
-  text-shadow: 0 0 4px #ff6600;
-}
-
+/* 💬 Повідомлення */
 .alert {
-  background: #3a1f00;
-  border: 1px solid #ffb84d;
+  background: rgba(200, 230, 255, 0.6);
+  border: 1px solid #80cfff;
   padding: 8px;
-  border-radius: 5px;
+  border-radius: 6px;
   margin: 10px auto;
   max-width: 400px;
   text-align: center;
-  color: #ffcc66;
+  color: #001831;
   font-weight: bold;
-  text-shadow: 0 0 4px #ff9900;
+  text-shadow: 0 0 4px #66c2ff;
+  box-shadow: 0 0 10px rgba(120, 200, 255, 0.3);
+}
+
+/* 🟦 Жовта смужка прихована */
+.yellow-line {
+  display: none;
+}
+
+/* 🌨️ Анімація снігу */
+@keyframes snowfall {
+  0% { transform: translateY(-10px); opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+.snowflake {
+  position: fixed;
+  top: -10px;
+  color: #ffffffcc;
+  font-size: 14px;
+  user-select: none;
+  pointer-events: none;
+  animation: snowfall linear infinite;
+  z-index: 9999;
 }
