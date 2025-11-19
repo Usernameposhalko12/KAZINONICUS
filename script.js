@@ -3140,8 +3140,8 @@ function MenuBank() {
       <div style="flex:1; min-width:250px; padding:15px; border-radius:12px;
                   background:rgba(190,220,255,0.55); box-shadow:0 0 15px rgba(120,200,255,0.3);">
         <h3>📈 Курси сьогодні</h3>
-        <p>1 XCoin = <b>${priceX}</b> нік</p>
-        <p>1 OPEX = <b>${priceO}</b> нік</p>
+        <p>1 XCoin = <b>${priceX}</b> нікусів</p>
+        <p>1 OPEX = <b>${priceO}</b> нікусів</p>
         <p>Дата оновлення: ${new Date().toLocaleDateString()}</p>
       </div>
     </div>
