@@ -1939,7 +1939,7 @@ const tasks = [
   {id:107, description:"Отримати Белуга або Том", reward:()=>addBPW(1500), check:()=>inventory.some(i=>["Белуга","Том"].includes(i.name)), completed:false},
   {id:108, description:"Отримати Попугай-а або Надрозум", reward:()=>addBPW(2200), check:()=>inventory.some(i=>["Попугай-а","Надрозум"].includes(i.name)), completed:false},
   {id:109, description:"Отримати 1487 або Сумно або Попугайчик", reward:()=>addBPW(1200), check:()=>inventory.some(i=>["1487","Сумно","Попугайчик"].includes(i.name)), completed:false},
-  {id:110, description:"Отримати Облять або Привіт,Друже або Людина", reward:()=>addBPW(1800), check:()=>inventory.some(i=>["Облять","Привіт,Друже","Людина"].includes(i.name)), completed:false},
+  {id:110, description:"Отримати Облять або Привіт,Друже або Людина", reward:()=>addBPW(1800), check:()=>inventory.some(i=>["ОБЛЯТЬ","Привіт,Друже","Людина"].includes(i.name)), completed:false},
   {id:111, description:"Отримати Кіт-борщ або КимЧенДрин або Окак", reward:()=>addBPW(2200), check:()=>inventory.some(i=>["Кіт-борщ","КимЧенДрин","Окак"].includes(i.name)), completed:false},
   {id:112, description:"*Наркобарон* — вибити Крейду", reward:()=>addBPW(1500), check:()=>inventory.some(i=>["Крейда"].includes(i.name)), completed:false},
   {id:113, description:"*Біолог* — вибити Мʼяту", reward:()=>addBPW(2000), check:()=>inventory.some(i=>["Мʼята"].includes(i.name)), completed:false},
