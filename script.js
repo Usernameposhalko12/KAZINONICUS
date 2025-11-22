@@ -3228,7 +3228,7 @@ const salePacks = [
   { id: "pack_winter3", name: "Пакет Зимовий 3", price: 500, low: 225 },    // 500/4=125, 225/4=56
   { id: "pack_wd1", name: "Winter Dreams 1", price: 600, low: 275 },        // 600/4=150, 275/4=69
   { id: "pack_wd2", name: "Winter Dreams 2", price: 800, low: 360 },        // 800/4=200, 360/4=90
-  { id: "pack_donate", name: "Донатний пакет", price: 12, low: 6 }         // 16/4=4
+  { id: "pack_donate", name: "Донатний пакет", price: 15, low: 10 }         // 16/4=4
 ];
 
 const SALE_KEY = "saleShopNikus";
@@ -3253,8 +3253,8 @@ function generateSaleShop() {
       id: p.id,
       name: p.name,
       price: price,
-      wasPrice: (p.id === "pack_donate") ? 12 : Math.floor(p.price/4),
-      lowPrice: (p.id === "pack_donate") ? 6 : Math.floor(p.low/4),
+      wasPrice: (p.id === "pack_donate") ? 25 : Math.floor(p.price/4),
+      lowPrice: (p.id === "pack_donate") ? 10 : Math.floor(p.low/4),
       discountType: useNormal ? "recommended" : "big",
       img: `img/sales/${p.id}.png`
     };
