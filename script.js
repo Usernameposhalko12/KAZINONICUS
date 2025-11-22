@@ -3228,7 +3228,7 @@ const salePacks = [
   { id: "pack_winter3", name: "Пакет Зимовий 3", price: 500, low: 225 },    // 500/4=125, 225/4=56
   { id: "pack_wd1", name: "Winter Dreams 1", price: 600, low: 275 },        // 600/4=150, 275/4=69
   { id: "pack_wd2", name: "Winter Dreams 2", price: 800, low: 360 },        // 800/4=200, 360/4=90
-  { id: "pack_donate", name: "Донатний пакет", price: 15, low: 10 }         // 16/4=4
+  { id: "pack_donate", name: "Донатний пакет", price: 20, low: 10 }         // 16/4=4
 ];
 
 const SALE_KEY = "saleShopNikus";
@@ -3248,7 +3248,7 @@ function generateSaleShop() {
   const shuffled = [...salePacks].sort(() => Math.random() - 0.5);
   const selected = shuffled.slice(0, 2).map(p => {
     const useNormal = Math.random() < 0.75;
-    const price = (p.id === "pack_donate") ? 15 : Math.floor((useNormal ? p.price : p.low)/4);
+    const price = (p.id === "pack_donate") ? 20 : Math.floor((useNormal ? p.price : p.low)/4);
     return {
       id: p.id,
       name: p.name,
