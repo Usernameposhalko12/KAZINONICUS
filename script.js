@@ -2608,10 +2608,10 @@ function harvest(index) {
 
   let reward = 0, recharge = 0;
   switch (plant.name) {
-    case "Гарбуз": reward=5; recharge=24*60*60*1000; break;
-    case "Буде-ПопКорн": reward=5; recharge=12*60*60*1000; break;
-    case "Соняшник": reward=12.5; recharge=24*60*60*1000; break;
-    case "Золоте-Дерево": reward=25; recharge=24*60*60*1000; break;
+    case "Гарбуз": reward=10; recharge=24*60*60*1000; break;
+    case "Буде-ПопКорн": reward=10; recharge=12*60*60*1000; break;
+    case "Соняшник": reward=25; recharge=24*60*60*1000; break;
+    case "Золоте-Дерево": reward=50; recharge=24*60*60*1000; break;
   }
 
   const now = Date.now();
