@@ -2121,7 +2121,8 @@ const promoCodesBase64 = {
   "QVVUSFVNMTIzMTQ4OA==":{type:"unlimited",reward:()=>{addCase("autumnus");alert("Отримано кейс Autumnus25!");}},
   "R0lGVDEyMw==": {type:"once", reward:()=>{addCase("wint25gift"); alert("Отримано Різдвяний Подарунок!");}},
   "T0tBSw==": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
-"VU4xMDAwQlA=": {
+  "UFJPTU82Nw==": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+  "VU4xMDAwQlA=": {
     type: "unlimited", 
     reward: () => {
         addBPW(1000); // це оновить і змінну currentBPS, і лічильник
