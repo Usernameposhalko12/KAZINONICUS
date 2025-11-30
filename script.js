@@ -2122,6 +2122,7 @@ const promoCodesBase64 = {
   "R0lGVDEyMw==": {type:"once", reward:()=>{addCase("wint25gift"); alert("Отримано Різдвяний Подарунок!");}},
   "T0tBSw==": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
   "UFJPTU82Nw==": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+  "U0lYU0VWRU4=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
   "VU4xMDAwQlA=": {
     type: "unlimited", 
     reward: () => {
