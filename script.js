@@ -2123,7 +2123,7 @@ const promoCodesBase64 = {
   "T0tBSw==": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
   "UFJPTU82Nw==": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
   "U0lYU0VWRU4=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
-  "T0tBSzY3=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+  "UVdFUlRZNjc=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
   "VU4xMDAwQlA=": {
     type: "unlimited", 
     reward: () => {
