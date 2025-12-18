@@ -1038,7 +1038,7 @@ function dropBoxCase(){
 }
 
 function dropGiftCase(){
-  const rates = {secret:0.005, epic:0.205, exceptional:0.79};
+  const rates = {secret:0.5, epic:0.25, exceptional:0.70};
   let rarity = dropByRates(rates);
 
   if(rarity === "secret"){
