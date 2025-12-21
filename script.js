@@ -2099,6 +2099,7 @@ function closeUserRights() {
 }
 
 const promoCodesBase64 = {
+  "MjUwTklLVVNJVg==": {type:"once", reward:()=>{addBalance(250); alert("Отримано 250 нікусів!");}},
   "TklDVVMxMjM=": {type:"once", reward:()=>{addBalance(250); alert("Отримано 250 нікусів!");}},
   "SURJT0tBSzE0ODg=": {type:"unlimited", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
   "S0FWSUsxNTk=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
