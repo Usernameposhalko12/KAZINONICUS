@@ -2164,7 +2164,15 @@ const promoCodesBase64 = {
         alert("Отримано 1000 BPS!");
     }
 },
-
+"U0FOVEE=": {
+  type: "once",
+  reward: () => {
+    addCase("kolek2", 3);
+    addCase("wint25", 3);
+    addCase("wint25gift", 3);
+    alert("Отримано подарунок від Санти: 3 Кейса Зима25, 3 Різдвяних Кейса, 3 Колекційних кейса Зима25");
+  }
+},
 "TEVWRUxCT05VUw==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},  
 "Qk9PU1RNT0RF": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},  
 "UkFORE9NRFJPUA==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},  
