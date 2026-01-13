@@ -2125,6 +2125,8 @@ const promoCodesBase64 = {
   "UFJPTU82Nw==": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
   "U0lYU0VWRU4=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
   "UVdFUlRZNjc=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+
+  "U09ST0tTSU0=": {type:"once", reward:()=>{addCase("WDGASTER"); alert("Отримано кейс Winter Dreams!");}},
   "VU4xMDAwQlA=": {
     type: "unlimited", 
     reward: () => {
