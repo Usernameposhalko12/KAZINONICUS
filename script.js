@@ -2122,7 +2122,7 @@ const promoCodesBase64 = {
   "QVVUSFVNMTIzMTQ4OA==":{type:"unlimited",reward:()=>{addCase("autumnus");alert("Отримано кейс Autumnus25!");}},
   "R0lGVDEyMw==": {type:"once", reward:()=>{addCase("wint25gift"); alert("Отримано Різдвяний Подарунок!");}},
   "T0tBSw==": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
-  "UFJPTU82Nw==": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
+"RGlkS2F6aW5v": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
   "U0lYU0VWRU4=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
   "UVdFUlRZNjc=": {type:"once", reward:()=>{addBalance(100); alert("Отримано 100 нікусів!");}},
 
