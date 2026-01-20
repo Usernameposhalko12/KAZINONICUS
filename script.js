@@ -1,48 +1,107 @@
-const MUSIC_KEY = "bgMusicTime";
+// ==================== 🎵 GAME MUSIC SYSTEM ====================
 
-let bgMusic = new Audio("music.mp3");
+const MUSIC_TIME_KEY = "bgMusicTime";
+const MUSIC_ACTIVE_KEY = "bgMusicActive";
+
+const bgMusic = new Audio("music.mp3");
 bgMusic.loop = true;
-bgMusic.volume = 0.4;
+bgMusic.volume = 0;
 
+const targetVolume = 0.4;
 let musicStarted = false;
 
-// старт музики
+// ==================== ▶️ START MUSIC ====================
 function startGameMusic() {
   if (musicStarted) return;
 
-  // відновлюємо позицію
-  const savedTime = localStorage.getItem(MUSIC_KEY);
+  const savedTime = localStorage.getItem(MUSIC_TIME_KEY);
   if (savedTime) {
     bgMusic.currentTime = parseFloat(savedTime);
   }
 
   bgMusic.play().then(() => {
     musicStarted = true;
+    localStorage.setItem(MUSIC_ACTIVE_KEY, "1");
+    fadeIn();
   }).catch(()=>{});
 }
 
-// зберігаємо позицію постійно
+// ==================== 🔊 FADE IN ====================
+function fadeIn() {
+  bgMusic.volume = 0;
+  const step = 0.02;
+
+  const i = setInterval(() => {
+    if (bgMusic.volume < targetVolume - step) {
+      bgMusic.volume += step;
+    } else {
+      bgMusic.volume = targetVolume;
+      clearInterval(i);
+    }
+  }, 30);
+}
+
+// ==================== 🔇 FADE OUT ====================
+function fadeOut(callback) {
+  const step = 0.02;
+
+  const i = setInterval(() => {
+    if (bgMusic.volume > step) {
+      bgMusic.volume -= step;
+    } else {
+      bgMusic.volume = 0;
+      clearInterval(i);
+      if (callback) callback();
+    }
+  }, 30);
+}
+
+// ==================== 💾 SAVE POSITION ====================
 setInterval(() => {
   if (!bgMusic.paused) {
-    localStorage.setItem(MUSIC_KEY, bgMusic.currentTime);
+    localStorage.setItem(MUSIC_TIME_KEY, bgMusic.currentTime);
   }
 }, 500);
 
-// Chrome ставить pause при alert → ловимо повернення фокусу
-window.addEventListener("focus", resumeMusic);
-document.addEventListener("visibilitychange", resumeMusic);
-
+// ==================== 🔄 RESUME AFTER ALERT / FOCUS ====================
 function resumeMusic() {
   if (!musicStarted) return;
+  if (localStorage.getItem(MUSIC_ACTIVE_KEY) !== "1") return;
 
-  const savedTime = localStorage.getItem(MUSIC_KEY);
+  const savedTime = localStorage.getItem(MUSIC_TIME_KEY);
   if (savedTime) {
     bgMusic.currentTime = parseFloat(savedTime);
   }
 
   if (bgMusic.paused) {
-    bgMusic.play().catch(()=>{});
+    bgMusic.play().then(fadeIn).catch(()=>{});
   }
+}
+
+window.addEventListener("focus", resumeMusic);
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) resumeMusic();
+});
+
+// ==================== 🚪 EXIT GAME ====================
+window.addEventListener("beforeunload", () => {
+  if (!musicStarted) return;
+
+  localStorage.setItem(MUSIC_TIME_KEY, bgMusic.currentTime);
+  localStorage.removeItem(MUSIC_ACTIVE_KEY);
+
+  fadeOut(() => {
+    bgMusic.pause();
+  });
+});
+
+// ==================== 📌 OPTIONAL MANUAL STOP ====================
+function stopGameMusic() {
+  localStorage.removeItem(MUSIC_ACTIVE_KEY);
+  fadeOut(() => {
+    bgMusic.pause();
+    musicStarted = false;
+  });
 }
 const accounts = {
   "ARSEN123": "ARSENPDIDDY123",
