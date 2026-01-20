@@ -5,7 +5,6 @@
   <title>NICUS CASE ULTRA</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* Тимчасово вбудовано стилі для лого та жовтої лінії */
     body {
       margin: 0;
       padding: 0;
@@ -35,24 +34,39 @@
     }
   </style>
 </head>
+
 <body>
   <div id="logo-container">
     <img src="img/logo.png" alt="NICUS CASE ULTRA" id="logo" />
   </div>
   <div class="yellow-line"></div>
-
   <div id="app"></div>
 
+<body>
+ <!-- Вибір насіння -->
+<div id="seedSelector" class="modal">
+  <div class="box">
+    <h3>🌱 Вибери насіння</h3>
+    <div id="seedOptions"></div>
+    <br>
+    <button onclick="closeSeedSelector()">❌ Закрити</button>
+  </div>
+</div>
+
+<!-- Дії з рослиною -->
+<div id="plantActions" class="modal">
+  <div class="box"></div>
+</div>
+
+<body>
+<!-- QR-сканер -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+
+  <!-- Графіки -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Головний файл (ОДИН РАЗ) -->
   <script src="script.js"></script>
 
-<!-- QR-сканер -->
-<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-
-<!-- Графіки -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Твій головний файл -->
-<script src="script.js"></script>
-
 </body>
-</html> 
+</html>
