@@ -1,15 +1,49 @@
+const MUSIC_KEY = "bgMusicTime";
+
 let bgMusic = new Audio("music.mp3");
 bgMusic.loop = true;
 bgMusic.volume = 0.4;
+
 let musicStarted = false;
 
+// старт музики
 function startGameMusic() {
-  if (!musicStarted) {
-    bgMusic.play();
-    musicStarted = true;
+  if (musicStarted) return;
+
+  // відновлюємо позицію
+  const savedTime = localStorage.getItem(MUSIC_KEY);
+  if (savedTime) {
+    bgMusic.currentTime = parseFloat(savedTime);
   }
+
+  bgMusic.play().then(() => {
+    musicStarted = true;
+  }).catch(()=>{});
 }
 
+// зберігаємо позицію постійно
+setInterval(() => {
+  if (!bgMusic.paused) {
+    localStorage.setItem(MUSIC_KEY, bgMusic.currentTime);
+  }
+}, 500);
+
+// Chrome ставить pause при alert → ловимо повернення фокусу
+window.addEventListener("focus", resumeMusic);
+document.addEventListener("visibilitychange", resumeMusic);
+
+function resumeMusic() {
+  if (!musicStarted) return;
+
+  const savedTime = localStorage.getItem(MUSIC_KEY);
+  if (savedTime) {
+    bgMusic.currentTime = parseFloat(savedTime);
+  }
+
+  if (bgMusic.paused) {
+    bgMusic.play().catch(()=>{});
+  }
+}
 const accounts = {
   "ARSEN123": "ARSENPDIDDY123",
   "MatviyVes": "TON618",
