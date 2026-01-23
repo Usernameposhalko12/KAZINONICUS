@@ -1,108 +1,80 @@
-// ==================== 🎵 GAME MUSIC SYSTEM ====================
+const MUSIC_KEY = "bgMusicTime";
 
-const MUSIC_TIME_KEY = "bgMusicTime";
-const MUSIC_ACTIVE_KEY = "bgMusicActive";
-
-const bgMusic = new Audio("music.mp3");
+let bgMusic = new Audio("music.mp3");
 bgMusic.loop = true;
-bgMusic.volume = 0;
+bgMusic.volume = 0.4;
 
-const targetVolume = 0.4;
 let musicStarted = false;
 
-// ==================== ▶️ START MUSIC ====================
+// перевірка чи музика увімкнена
+function isMusicEnabled() {
+    return localStorage.getItem("musicEnabled") !== "false";
+}
+
+// старт музики
 function startGameMusic() {
-  if (musicStarted) return;
+    if (musicStarted) return;
 
-  const savedTime = localStorage.getItem(MUSIC_TIME_KEY);
-  if (savedTime) {
-    bgMusic.currentTime = parseFloat(savedTime);
-  }
-
-  bgMusic.play().then(() => {
-    musicStarted = true;
-    localStorage.setItem(MUSIC_ACTIVE_KEY, "1");
-    fadeIn();
-  }).catch(()=>{});
-}
-
-// ==================== 🔊 FADE IN ====================
-function fadeIn() {
-  bgMusic.volume = 0;
-  const step = 0.02;
-
-  const i = setInterval(() => {
-    if (bgMusic.volume < targetVolume - step) {
-      bgMusic.volume += step;
-    } else {
-      bgMusic.volume = targetVolume;
-      clearInterval(i);
+    const savedTime = localStorage.getItem(MUSIC_KEY);
+    if (savedTime) {
+        bgMusic.currentTime = parseFloat(savedTime);
     }
-  }, 30);
-}
 
-// ==================== 🔇 FADE OUT ====================
-function fadeOut(callback) {
-  const step = 0.02;
-
-  const i = setInterval(() => {
-    if (bgMusic.volume > step) {
-      bgMusic.volume -= step;
+    if (isMusicEnabled()) {
+        bgMusic.play().then(() => {
+            musicStarted = true;
+        }).catch(()=>{ musicStarted = true; });
     } else {
-      bgMusic.volume = 0;
-      clearInterval(i);
-      if (callback) callback();
+        musicStarted = true;
     }
-  }, 30);
 }
 
-// ==================== 💾 SAVE POSITION ====================
+// оновлюємо стан музики (вмикаємо/вимикаємо)
+function updateMusicState() {
+    if (!musicStarted) return;
+
+    if (isMusicEnabled()) {
+        bgMusic.play().catch(()=>{});
+    } else {
+        bgMusic.pause();
+    }
+}
+
+// зберігаємо позицію музики постійно
 setInterval(() => {
-  if (!bgMusic.paused) {
-    localStorage.setItem(MUSIC_TIME_KEY, bgMusic.currentTime);
-  }
+    if (!bgMusic.paused) {
+        localStorage.setItem(MUSIC_KEY, bgMusic.currentTime);
+    }
 }, 500);
 
-// ==================== 🔄 RESUME AFTER ALERT / FOCUS ====================
-function resumeMusic() {
-  if (!musicStarted) return;
-  if (localStorage.getItem(MUSIC_ACTIVE_KEY) !== "1") return;
-
-  const savedTime = localStorage.getItem(MUSIC_TIME_KEY);
-  if (savedTime) {
-    bgMusic.currentTime = parseFloat(savedTime);
-  }
-
-  if (bgMusic.paused) {
-    bgMusic.play().then(fadeIn).catch(()=>{});
-  }
-}
-
+// Chrome ставить pause при alert → ловимо повернення фокусу
 window.addEventListener("focus", resumeMusic);
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden) resumeMusic();
-});
+document.addEventListener("visibilitychange", resumeMusic);
 
-// ==================== 🚪 EXIT GAME ====================
-window.addEventListener("beforeunload", () => {
-  if (!musicStarted) return;
+function resumeMusic() {
+    if (!musicStarted) return;
 
-  localStorage.setItem(MUSIC_TIME_KEY, bgMusic.currentTime);
-  localStorage.removeItem(MUSIC_ACTIVE_KEY);
+    const savedTime = localStorage.getItem(MUSIC_KEY);
+    if (savedTime) {
+        bgMusic.currentTime = parseFloat(savedTime);
+    }
 
-  fadeOut(() => {
-    bgMusic.pause();
-  });
-});
-
-// ==================== 📌 OPTIONAL MANUAL STOP ====================
-function stopGameMusic() {
-  localStorage.removeItem(MUSIC_ACTIVE_KEY);
-  fadeOut(() => {
-    bgMusic.pause();
-    musicStarted = false;
-  });
+    if (isMusicEnabled() && bgMusic.paused) {
+        bgMusic.play().catch(()=>{});
+    }
 }
+
+// ================== ПЕРЕМІКАЧ МУЗИКИ ==================
+function toggleMusic() {
+    const enabled = isMusicEnabled();
+    localStorage.setItem("musicEnabled", !enabled);
+    updateMusicState();
+    accountMenu(); // оновлюємо кнопку в акаунт-меню
+}
+
+// ================== СТАРТ МУЗИКИ ПРИ ЗАПУСКУ ГРИ ==================
+startGameMusic();
+
 const accounts = {
   "ARSEN123": "ARSENPDIDDY123",
   "MatviyVes": "TON618",
@@ -813,6 +785,8 @@ if(type === "dogcollection") return "DogCollection";
 if(type === "kolek1") return "Осінній Колекційний Кейс"; 
 if(type === "kolek2") return "Зимовий Колекційний Кейс"; 
 
+if(type === "medal1") return "Медальний Кейс «День Нікус Кейс Ультра 2026»"; 
+
 return "Невідомий кейс";
 }
 
@@ -876,6 +850,8 @@ function openCase(idx){
     case "catcollection": dropFunc = dropcatcollectionCase; break;
     case "dogcollection": dropFunc = dropdogcollectionCase; break; 
     case "kolek2": dropFunc = dropkolek2case; break;
+    case "medal1": dropFunc = dropmedal1case; break;
+
     default: alert("Невідомий тип кейсу"); return;
   }
 
@@ -1121,6 +1097,23 @@ function dropNNcase(){
     {name:"Соняшник", img:"G3.png", rarity:"Епічна", chance:0.20},
     {name:"Буде-ПопКорн", img:"G2.png", rarity:"Виняткова", chance:0.28},
     {name:"Гарбуз", img:"G1.png", rarity:"Звичайна", chance:0.47}
+]; 
+
+ let r = Math.random(), sum = 0;
+  for(const p of pool){
+    sum += p.chance;
+    if(r < sum) return createItem(p);
+  }
+  return createItem(pool[pool.length-1]);
+}
+
+function dropmedal1case(){
+  const pool = [
+    {name:"Діамантова медаль «День Нікус Кейс Ультра 2026»", img:"medaldiamont1.png", rarity:"Спеціальна", chance:0.10},
+    {name:"Золота медаль «День Нікус Кейс Ультра 2026»", img:"medalgold1.png", rarity:"Секретна", chance:0.20},
+    {name:"Срібна медаль «День Нікус Кейс Ультра 2026»", img:"medalsilver1.png", rarity:"Епічна", chance:0.35},
+    {name:"Бронзова медаль «День Нікус Кейс Ультра 2026»", img:"medalbronze1.png", rarity:"Виняткова", chance:0.35}
+  
 ]; 
 
  let r = Math.random(), sum = 0;
@@ -2964,8 +2957,14 @@ loadUser();
 loadTasks();
 
 function accountMenu() {
+    const musicEnabled = localStorage.getItem("musicEnabled") !== "false";
+
     document.getElementById("app").innerHTML = `
         <h2>Акаунт ⚙️</h2>
+
+        <button onclick="toggleMusic()">
+            ${musicEnabled ? "🔊 Музика: Увімкнено" : "🔇 Музика: Вимкнено"}
+        </button><br/><br/>
 
         <input type="password" id="deletePass" placeholder="Введіть пароль" oninput="checkDeletePass()"/><br/><br/>
 
@@ -2976,7 +2975,6 @@ function accountMenu() {
 
         <button onclick="mainMenu()">⬅ Назад</button>
 
-        <!-- ================== МОДАЛКА ПРАВИЛ ================== -->
         <div id="rightsModal" style="
             display:none;
             position:fixed;
@@ -3007,7 +3005,7 @@ function accountMenu() {
                     6. Донат є виключно добровільним.<br>
                     7. Використання гри означає погодження з цими правилами.<br>
                     8. Нікус Кейс Ультра не є азартною грою або казино.<br>
-                    9. Гра базується на популярних ігрових механіках (кейси, батл-паси).<br>
+                    9. Гра базується на популярних ігрових механіках.<br>
                     10. Гра не пропагує азартні ігри.
                 </p>
 
@@ -3024,7 +3022,6 @@ function accountMenu() {
             </div>
         </div>
 
-        <!-- ================== МОДАЛКА ІНФО ================== -->
         <div id="infoModal" style="
             display:none;
             position:fixed;
@@ -3063,6 +3060,14 @@ function accountMenu() {
             </div>
         </div>
     `;
+}
+
+/* ================== ПЕРЕМІКАЧ МУЗИКИ ================== */
+function toggleMusic() {
+    const enabled = localStorage.getItem("musicEnabled") !== "false";
+    localStorage.setItem("musicEnabled", !enabled);
+    updateMusicState();
+    accountMenu();
 }
 
 /* ================== ВИДАЛЕННЯ ПРОГРЕСУ ================== */
@@ -3217,6 +3222,22 @@ const promoCodesBase64 = {
       openLevelMenu(); // оновлюємо меню рівня, якщо воно відкрито
     }
   },
+
+"TUVEQUw=": {
+  type: "unlimited",
+  reward: () => {
+    addCase("medal1");
+    alert("Отримано медальний кейс «День Нікус Кейс Ультра 2026»!");
+  }
+},
+
+"TUVEQUxET1NUQVRPSw==": {
+  type: "once",
+  reward: () => {
+    addCase("medal1");
+    alert("Отримано медальний кейс «День Нікус Кейс Ультра 2026»!");
+  }
+},
 
 "R0RFWlBPV0VS": {type:"once", reward:()=>{addCase("kolek1"); alert("Осінній Колекціоний Кейс");}},  
 "TkVXU1RBUlQ=": {type:"once", reward:()=>{addCase("kolek1"); alert("Осінній Колекціоний Кейс");}},  
@@ -5054,8 +5075,7 @@ const collectionRespect = {
   "CatCollection": 0.5,
   "DogCollection": 0.5,
   "Mid-season": 0.5,
-  "WINTERDREAMS": 0.6,
-  "Autumnus25": 0.7
+  "WINTERDREAMS": 0.6
 };
 
 function getItemPrice(item) {
