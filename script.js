@@ -3222,7 +3222,14 @@ const promoCodesBase64 = {
       openLevelMenu(); // оновлюємо меню рівня, якщо воно відкрито
     }
   },
-
+  "U1BBU0lCTw==": {  
+    type: "once",
+    reward: () => {
+      dosvid += 50; // додаємо 50 досвіду
+      alert("Отримано 50 досвіду!");
+      openLevelMenu(); // оновлюємо меню рівня, якщо воно відкрито
+    }
+  },
 "TUVEQUw=": {
   type: "unlimited",
   reward: () => {
