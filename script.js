@@ -3173,7 +3173,7 @@ const promoCodesBase64 = {
         alert("Отримано 1000 BPS!");
     }
 },
-
+"RGVhbER1Y2s=": {type:"once", reward:()=>{addCase("catcollection"); alert("Отримано кейс CatCollection!");}},  
 "TEVWRUxCT05VUw==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},  
 "Qk9PU1RNT0RF": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},  
 "UkFORE9NRFJPUA==": {type:"once", reward:()=>{addCase("box"); alert("Отримано кейс Бокс!");}},  
