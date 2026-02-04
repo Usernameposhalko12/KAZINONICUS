@@ -3205,7 +3205,13 @@ const promoCodesBase64 = {
       alert("Отримано ключ!");
     }
   },
-
+"RElES0FaSUs=": {
+  type: "once",
+  reward: () => {
+    addCase("catcollection", 3);
+    addCase("dogcollection", 3);
+  }
+},
 "U0VDUkVUS0VZ": {
     type:"once",
     reward:()=> {
