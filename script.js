@@ -3182,7 +3182,13 @@ const promoCodesBase64 = {
 "TUFHSUNCT09TVA==": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},  
 
 "V0RHQVNURVI=": {type:"once", reward:()=>{addCase("WDGASTER"); alert("Отримано кейс WinterDreams!");}},  
-
+"Q0FURE9XR08=": {
+  type: "once",
+  reward: () => {
+    addCase("catcollection");
+    alert("Отримано кейс CatCollection!");
+  }
+},
 "TklLVVNNQU5JQQ==": {type:"once", reward:()=>{addCase("arcase"); alert("Отримано Аркад кейс!");}},  
 "UFJPTU9NT01FTlQ=": {type:"once", reward:()=>{addCase("arcase"); alert("Отримано Аркад кейс!");}},  
 "SU5JS1VT": {type:"once", reward:()=>{addBalance(50); alert("Отримано 50 нікусів!");}},  
