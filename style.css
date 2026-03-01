@@ -1,0 +1,296 @@
+/* 🌸 GLOBAL — FLOWER POWER SPRING THEME */
+body {
+  background:
+    radial-gradient(circle at 50% -40%, #fffacd 0%, #4a7a4a 85%),
+    repeating-radial-gradient(circle at 20% 30%, rgba(255,250,205,0.08) 0 60px, transparent 60px 140px),
+    repeating-radial-gradient(circle at 80% 70%, rgba(240,255,120,0.07) 0 80px, transparent 80px 180px);
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  color: #fffef5;
+  font-family: 'MS Sans Serif', 'Microsoft Sans Serif', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  overflow-x: hidden;
+}
+
+/* 🌺 MOVING FLOWER OVERLAY */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("leaf-pattern.png");
+  background-size: 420px;
+  background-repeat: repeat;
+  opacity: 0.06;
+  pointer-events: none;
+  animation: leafFloat 120s linear infinite;
+}
+
+@keyframes leafFloat {
+  from { background-position: 0 0; }
+  to { background-position: 2000px 1500px; }
+}
+
+/* 🌸 HEADER */
+#logo-container {
+  text-align: center;
+  padding: 16px 0;
+  background: linear-gradient(90deg, #4aa8c0, #b8e8a8, #ffe066, #b8e8a8, #4aa8c0);
+  box-shadow: 0 6px 20px rgba(74,168,192,0.45);
+  border-bottom: 2px solid rgba(184,232,168,0.5);
+}
+
+#logo {
+  max-width: 260px;
+  height: auto;
+  filter: drop-shadow(0 0 18px rgba(255,224,66,0.7));
+}
+
+/* 🌼 MAIN PANEL */
+#app {
+  max-width: 920px;
+  margin: 28px auto;
+  padding: 18px;
+  background: linear-gradient(180deg, rgba(224,248,255,0.93), rgba(230,255,225,0.9));
+  border-radius: 22px;
+  border: 2px solid #5bbcd4;
+  box-shadow: 0 0 35px rgba(74,168,192,0.5);
+  backdrop-filter: blur(12px);
+  color: #1a3a2a;
+}
+
+/* HEADERS */
+h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #1a6a7a;
+  text-shadow: 0 0 12px rgba(184,232,168,0.7);
+}
+
+/* 🌺 BUTTONS — оригінальний стиль */
+button {
+  background: linear-gradient(45deg, #aed581, #dce775);
+  border: none;
+  padding: 11px 24px;
+  margin: 5px 0;
+  border-radius: 18px;
+  cursor: pointer;
+  color: #2d4a1f;
+  font-weight: bold;
+  font-family: 'MS Sans Serif', Arial, sans-serif;
+  box-shadow: 0 4px 0 #7cb342, 0 0 18px rgba(156,204,101,0.6);
+  transition: 0.25s ease;
+  position: relative;
+}
+
+button::after {
+  content: "🌼";
+  position: absolute;
+  right: 8px;
+  top: 4px;
+  font-size: 14px;
+  opacity: 0.5;
+}
+
+button:hover {
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 7px 0 #689f38, 0 0 26px rgba(197,225,165,0.9);
+}
+
+/* INPUT */
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 7px 0 15px 0;
+  border-radius: 12px;
+  border: 2px solid #5bbcd4;
+  background: #f0faff;
+  font-weight: bold;
+  font-family: 'MS Sans Serif', Arial, sans-serif;
+  color: #1a3a2a;
+  box-sizing: border-box;
+  transition: 0.2s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #ffe066;
+  box-shadow: 0 0 12px rgba(255,224,66,0.7);
+}
+
+/* 🌷 INVENTORY */
+.inventory-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+
+.inv-card {
+  width: 170px;
+  background: linear-gradient(180deg, #e8f8ff, #e2fae8);
+  border: 2px solid #5bbcd4;
+  border-radius: 20px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 0 18px rgba(74,168,192,0.4);
+  position: relative;
+  color: #1a3a2a;
+  font-family: 'MS Sans Serif', Arial, sans-serif;
+}
+
+/* 🌺 RARITY */
+.rarity-badge {
+  margin-top: 6px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.quality-badge {
+  margin-top: 4px;
+  padding: 3px 6px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #fff;
+}
+
+/* 🔒 LOCK */
+.inv-locked::after {
+  content: "🔒 ЗАБЛОКОВАНО";
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  background: rgba(160,60,60,0.95);
+  color: #fff;
+  font-weight: bold;
+  border-radius: 12px;
+  padding: 4px;
+  font-size: 13px;
+  box-shadow: 0 0 12px rgba(140,0,0,0.6);
+}
+
+/* 🎁 CASES */
+.case-container img {
+  width: 150px;
+  user-select: none;
+  border-radius: 24px;
+  border: 3px solid #5bbcd4;
+  box-shadow: 0 0 30px rgba(74,168,192,0.7);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.case-container img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 45px rgba(255,224,66,0.9);
+}
+
+.case-price {
+  font-weight: bold;
+  color: #1a6a7a;
+  margin-top: 5px;
+  text-shadow: 0 0 6px rgba(255,224,66,0.6);
+}
+
+/* 💬 ALERTS */
+.alert {
+  background: linear-gradient(180deg, #e8f8ff, #e2fae8);
+  border: 2px dashed #5bbcd4;
+  padding: 9px;
+  border-radius: 20px;
+  margin: 10px auto;
+  max-width: 420px;
+  text-align: center;
+  color: #1a3a2a;
+  font-weight: bold;
+  box-shadow: 0 0 16px rgba(74,168,192,0.5);
+  font-family: 'MS Sans Serif', Arial, sans-serif;
+}
+
+.alert::before {
+  content: "🌼 ";
+}
+
+/* 🌸 FLOATING FLOWERS */
+@keyframes leafFall {
+  0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+.leaf {
+  position: fixed;
+  top: -10px;
+  color: #ffe066;
+  font-size: 18px;
+  user-select: none;
+  pointer-events: none;
+  animation: leafFall linear infinite;
+  z-index: 9999;
+}
+
+/* PIXEL */
+.pixel {
+  width: 512px;
+  height: 512px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* 🌺 SEED SELECTOR */
+#seedSelector {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(180deg, #1a4a5a, #2a5a3a);
+  border: 3px solid #5bbcd4;
+  padding: 15px;
+  color: #fff;
+  z-index: 9999;
+  width: 300px;
+  max-height: 70vh;
+  display: none;
+  border-radius: 16px;
+}
+
+#seedOptions {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+#seedOptions button {
+  display: block;
+  width: 90%;
+  margin: 5px auto;
+  padding: 8px 12px;
+  background: linear-gradient(45deg, #aed581, #dce775);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* 🌷 LEVEL MENU */
+.level-menu {
+  max-width: 420px;
+  margin: auto;
+  background: linear-gradient(180deg, #1a6a7a, #1a5a3a);
+  color: #e8f8ff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 0 18px rgba(74,168,192,0.4);
+}
+
+.level-menu button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+/* TEXT COLORS */
+.penalty { color: #ff7777; }
+.freeze  { color: #88cfff; margin-top: 10px; }
