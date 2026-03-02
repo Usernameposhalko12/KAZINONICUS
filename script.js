@@ -182,7 +182,7 @@ localStorage.setItem(currentUser + "_inventory", JSON.stringify(inventory));
   function loadData() {
   if (!currentUser) return;
  balance = Math.round(parseFloat(localStorage.getItem(currentUser + "_balance") || "0"));
- nikus = parseFloat(localStorage.getItem(currentUser + "_nikus") || "0");
+ nikus = parseFloat(parseFloat(localStorage.getItem(currentUser + "_nikus") || "0").toFixed(2));
   OPEX = parseInt(localStorage.getItem(currentUser + "_OPEX")) || 0;
   lastPromoTimes = JSON.parse(localStorage.getItem(currentUser + "_lastPromoTimes")) || [];
 dosvid = parseInt(localStorage.getItem(currentUser + "_dosvid")) || 0;
