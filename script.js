@@ -5578,7 +5578,7 @@ const promoCodesBase64 = {
 "TUFHSUNCT09TVA==": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},  
 
 "V0RHQVNURVI=": {type:"once", reward:()=>{addCase("WDGASTER"); alert("Отримано кейс WinterDreams!");}},  
-
+"V0lOVEVSRFJFQU1TT0tBSw==": {type:"unlimited", reward:()=>{addCase("WDGASTER"); alert("Отримано кейс WinterDreams!");}},  
 "TklLVVNNQU5JQQ==": {type:"once", reward:()=>{addCase("arcase"); alert("Отримано Аркад кейс!");}},  
 "UFJPTU9NT01FTlQ=": {type:"once", reward:()=>{addCase("arcase"); alert("Отримано Аркад кейс!");}},  
 "SU5JS1VT": {type:"once", reward:()=>{addBalance(50); alert("Отримано 50 нікусів!");}},  
