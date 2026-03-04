@@ -5576,7 +5576,9 @@ const promoCodesBase64 = {
 "R0lWRU1FTklLVVM=": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},  
 "R0hPU1RDT0RF": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},  
 "TUFHSUNCT09TVA==": {type:"once", reward:()=>{addCase("autumn"); alert("Отримано кейс Осінь25!");}},  
+"RE9HQ0FTRTE0ODg=": {type:"unlimited", reward:()=>{addCase("dogcollection"); alert("Отримано кейс DogCollection!");}},  
 
+"Q0FUQ0FTRTE0ODg=": {type:"unlimited", reward:()=>{addCase("catcollection"); alert("Отримано кейс CatCollection!");}},  
 "V0RHQVNURVI=": {type:"once", reward:()=>{addCase("WDGASTER"); alert("Отримано кейс WinterDreams!");}},  
 
 "V0lOVEVSRFJFQU1TT0tBSw==": {type:"unlimited", reward:()=>{addCase("WDGASTER"); alert("Отримано кейс WinterDreams!");}},  
