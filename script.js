@@ -11778,6 +11778,14 @@ function Price1488_installPart(slot, id, itemName) {
     Price1488_toast(`❌ Цей компонент не сумісний з ${Price1488_getMb()?.name || "цією платою"}!`);
     return false;
   }
+  // Блокуємо встановлення зламаного SSD
+  if (slot === "storage") {
+    const invItem = inventory.find(i => i.name === itemName);
+    if (invItem && invItem.desc === "💥 Зламано") {
+      Price1488_toast("❌ Цей накопичувач зламаний — спочатку замініть його!");
+      return false;
+    }
+  }
 
   // Якщо вже щось є — знімаємо
   if (Price1488_state[slot]) Price1488_uninstallPart(slot);
