@@ -1,0 +1,375 @@
+/* 🕹️ GLOBAL — ARCADE SPRING THEME */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@700&display=swap');
+body {
+  background:
+    radial-gradient(ellipse at 50% 0%, #cc44ff22 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, #ff00cc22 0%, transparent 55%),
+    linear-gradient(160deg, #0d0820 0%, #1a0a3a 40%, #0a0628 100%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #e0d8ff;
+  font-family: 'Press Start 2P', 'MS Sans Serif', monospace;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  overflow-x: hidden;
+}
+
+/* 🕹️ SCANLINE OVERLAY */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(204, 68, 255, 0.03) 2px,
+    rgba(204, 68, 255, 0.03) 4px
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  animation: leafFloat 8s linear infinite;
+  z-index: 0;
+}
+
+@keyframes leafFloat {
+  from { background-position: 0 0; }
+  to   { background-position: 0 40px; }
+}
+
+/* 🌸 HEADER */
+#logo-container {
+  text-align: center;
+  padding: 16px 0;
+  background: linear-gradient(90deg,
+    #0d0820,
+    #cc44ff33,
+    #ff00cc33,
+    #00d4ff33,
+    #cc44ff33,
+    #0d0820
+  );
+  box-shadow: 0 6px 20px rgba(204, 68, 255, 0.45), 0 0 60px rgba(204,68,255,0.1) inset;
+  border-bottom: 2px solid #cc44ff;
+  position: relative;
+}
+
+#logo {
+  max-width: 260px;
+  height: auto;
+  filter: drop-shadow(0 0 18px rgba(0, 212, 255, 0.9)) drop-shadow(0 0 36px rgba(255,0,204,0.6));
+}
+
+/* 🕹️ MAIN PANEL */
+#app {
+  max-width: 920px;
+  margin: 28px auto;
+  padding: 18px;
+  background: linear-gradient(180deg,
+    rgba(13, 8, 40, 0.95),
+    rgba(20, 5, 50, 0.93)
+  );
+  border-radius: 4px;
+  border: 2px solid #cc44ff;
+  box-shadow:
+    0 0 35px rgba(204, 68, 255, 0.4),
+    0 0 80px rgba(204, 68, 255, 0.1),
+    inset 0 0 40px rgba(204, 68, 255, 0.05);
+  backdrop-filter: blur(12px);
+  color: #d8c8ff;
+  position: relative;
+}
+
+/* HEADERS */
+h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #00d4ff;
+  text-shadow:
+    0 0 12px rgba(0, 212, 255, 0.9),
+    0 0 30px rgba(0, 212, 255, 0.5),
+    0 0 60px rgba(0, 212, 255, 0.2);
+  font-family: 'Press Start 2P', monospace;
+  letter-spacing: 2px;
+}
+
+/* 🕹️ BUTTONS */
+button {
+  background: linear-gradient(45deg, #7700cc, #cc44ff, #ff00cc);
+  border: none;
+  padding: 11px 24px;
+  margin: 5px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #f0d0ff;
+  font-weight: bold;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  box-shadow:
+    0 4px 0 #44006688,
+    0 0 18px rgba(204, 68, 255, 0.6),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+  transition: 0.15s ease;
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  image-rendering: pixelated;
+}
+
+button::after {
+  content: "★";
+  position: absolute;
+  right: 8px;
+  top: 6px;
+  font-size: 10px;
+  opacity: 0.6;
+  color: #f0d0ff;
+}
+
+button:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow:
+    0 7px 0 #44006688,
+    0 0 26px rgba(204, 68, 255, 0.9),
+    0 0 50px rgba(0, 212, 255, 0.4);
+  background: linear-gradient(45deg, #00d4ff, #cc44ff, #ff00cc);
+}
+
+/* INPUT */
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 7px 0 15px 0;
+  border-radius: 4px;
+  border: 2px solid #cc44ff;
+  background: rgba(13, 8, 40, 0.8);
+  font-weight: bold;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #cc44ff;
+  box-sizing: border-box;
+  transition: 0.2s ease;
+  box-shadow: inset 0 0 12px rgba(204, 68, 255, 0.1);
+}
+
+input:focus {
+  outline: none;
+  border-color: #00d4ff;
+  box-shadow:
+    0 0 12px rgba(0, 212, 255, 0.7),
+    inset 0 0 16px rgba(0, 212, 255, 0.1);
+  color: #00d4ff;
+}
+
+/* 🗃️ INVENTORY */
+.inventory-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+
+.inv-card {
+  width: 170px;
+  background: linear-gradient(180deg,
+    rgba(204, 68, 255, 0.08),
+    rgba(20, 5, 50, 0.9)
+  );
+  border: 2px solid #cc44ff;
+  border-radius: 4px;
+  padding: 10px;
+  text-align: center;
+  box-shadow:
+    0 0 18px rgba(204, 68, 255, 0.3),
+    inset 0 0 20px rgba(204, 68, 255, 0.04);
+  position: relative;
+  color: #d8c8ff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+}
+
+/* 🌈 RARITY */
+.rarity-badge {
+  margin-top: 6px;
+  padding: 4px 6px;
+  border-radius: 3px;
+  font-weight: bold;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  text-shadow: 0 0 8px currentColor;
+}
+
+.quality-badge {
+  margin-top: 4px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  font-weight: bold;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+}
+
+/* 🔒 LOCK */
+.inv-locked::after {
+  content: "🔒 ЗАБЛОКОВАНО";
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  background: rgba(180, 0, 100, 0.9);
+  color: #fff;
+  font-weight: bold;
+  border-radius: 3px;
+  padding: 4px;
+  font-size: 8px;
+  box-shadow:
+    0 0 12px rgba(255, 0, 120, 0.7),
+    inset 0 0 10px rgba(255,0,120,0.2);
+  font-family: 'Press Start 2P', monospace;
+  text-shadow: 0 0 6px #ff0077;
+}
+
+/* 🎁 CASES */
+.case-container img {
+  width: 150px;
+  user-select: none;
+  border-radius: 4px;
+  border: 3px solid #cc44ff;
+  box-shadow:
+    0 0 30px rgba(204, 68, 255, 0.6),
+    0 0 60px rgba(204, 68, 255, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  image-rendering: pixelated;
+}
+
+.case-container img:hover {
+  transform: scale(1.1);
+  box-shadow:
+    0 0 45px rgba(255, 0, 204, 0.9),
+    0 0 90px rgba(0, 212, 255, 0.5);
+  filter: hue-rotate(30deg);
+}
+
+.case-price {
+  font-weight: bold;
+  color: #00d4ff;
+  margin-top: 5px;
+  text-shadow: 0 0 6px rgba(0, 212, 255, 0.8);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+}
+
+/* 💬 ALERTS */
+.alert {
+  background: linear-gradient(180deg,
+    rgba(204, 68, 255, 0.1),
+    rgba(20, 5, 50, 0.85)
+  );
+  border: 2px solid #cc44ff;
+  padding: 9px;
+  border-radius: 4px;
+  margin: 10px auto;
+  max-width: 420px;
+  text-align: center;
+  color: #d8c8ff;
+  font-weight: bold;
+  box-shadow: 0 0 16px rgba(204, 68, 255, 0.5);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  line-height: 1.7;
+}
+
+.alert::before {
+  content: "▶ ";
+  color: #cc44ff;
+}
+
+/* 🌟 FLOATING PIXELS */
+@keyframes leafFall {
+  0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+.leaf {
+  position: fixed;
+  top: -10px;
+  color: #cc44ff;
+  font-size: 14px;
+  user-select: none;
+  pointer-events: none;
+  animation: leafFall linear infinite;
+  z-index: 9999;
+  text-shadow: 0 0 8px #cc44ff;
+}
+
+/* PIXEL */
+.pixel {
+  width: 512px;
+  height: 512px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* 🕹️ SEED SELECTOR */
+#seedSelector {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(180deg, #0d0820, #08041a);
+  border: 3px solid #cc44ff;
+  padding: 15px;
+  color: #d8c8ff;
+  z-index: 9999;
+  width: 300px;
+  max-height: 70vh;
+  display: none;
+  border-radius: 4px;
+  box-shadow:
+    0 0 40px rgba(204, 68, 255, 0.5),
+    inset 0 0 30px rgba(204, 68, 255, 0.04);
+}
+
+#seedOptions {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+#seedOptions button {
+  display: block;
+  width: 90%;
+  margin: 5px auto;
+  padding: 8px 12px;
+  background: linear-gradient(45deg, #7700cc, #ff00cc);
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 9px;
+}
+
+/* 🕹️ LEVEL MENU */
+.level-menu {
+  max-width: 420px;
+  margin: auto;
+  background: linear-gradient(180deg, #0d0820, #08041a);
+  color: #d8c8ff;
+  padding: 16px;
+  border-radius: 4px;
+  box-shadow:
+    0 0 18px rgba(204, 68, 255, 0.4),
+    0 0 60px rgba(204, 68, 255, 0.1);
+  border: 2px solid #cc44ff44;
+}
+
+.level-menu button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 10px;
+}
+
+/* TEXT COLORS */
+.penalty { color: #ff2266; text-shadow: 0 0 8px #ff2266; }
+.freeze  { color: #00d4ff; margin-top: 10px; text-shadow: 0 0 8px #00d4ff; }
